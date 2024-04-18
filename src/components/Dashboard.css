@@ -1,0 +1,14 @@
+
+.about-me-options {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #d9d9d9;
+    padding: 8px;
+    display: none;
+}
+
+.about-me-item:hover .about-me-options {
+    display: block;
+}

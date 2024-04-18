@@ -1,36 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { Button, Table, Typography } from 'antd';
+import { Button, Table, Modal, Avatar, Typography } from 'antd'; // Importez Avatar et Typography depuis Ant Design
 import axios from 'axios';
+import { UserOutlined } from '@ant-design/icons'; // Importez UserOutlined depuis Ant Design
 
 const { Text } = Typography;
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const history = useHistory();
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/users')
-      .then(response => response.json())
-      .then(data => setUsers(data.data));
+    setLoading(true);
+    axios.get('http://127.0.0.1:5000/users')
+      .then(response => {
+        setUsers(response.data.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        setLoading(false);
+      });
   }, []);
 
   const handleDelete = (userId) => {
-    const isConfirmed = window.confirm('Are you sure you want to delete this user?');
+    setDeleteModalVisible(true);
+    setSelectedUserId(userId);
+  };
 
-    if (!isConfirmed) {
-      return;
-    }
-
-    fetch(`http://127.0.0.1:5000/users/${userId}`, {
-      method: 'DELETE',
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data.message);
-        setUsers(users.filter(user => user.id !== userId));
+  const confirmDelete = () => {
+    axios.delete(`http://127.0.0.1:5000/users/${selectedUserId}`)
+      .then(response => {
+        console.log(response.data.message);
+        setUsers(users.filter(user => user.id !== selectedUserId));
+        setDeleteModalVisible(false);
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => {
+        console.error('Error:', error);
+        setDeleteModalVisible(false);
+      });
   };
 
   const handleUpdate = (user) => {
@@ -38,6 +49,14 @@ const UserList = () => {
   };
 
   const columns = [
+    {
+      title: 'Avatar',
+      dataIndex: 'profile_image',
+      key: 'avatar',
+      render: (profile_image, user) => (
+        <Avatar src={profile_image} size="large" icon={<Avatar icon={<UserOutlined />} />} />
+      ),
+    },
     {
       title: 'ID',
       dataIndex: 'id',
@@ -59,6 +78,11 @@ const UserList = () => {
       key: 'email',
     },
     {
+      title: 'Role',
+      dataIndex: 'role_name',
+      key: 'role_name',
+    },
+    {
       title: 'Actions',
       key: 'actions',
       render: (text, user) => (
@@ -75,14 +99,25 @@ const UserList = () => {
   ];
 
   const paginationConfig = {
-    pageSize: 2,
+    pageSize: 5,
     showSizeChanger: false,
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h2>User List</h2>
-      <Table dataSource={users} columns={columns} rowKey="id" pagination={paginationConfig} />
+      <Table dataSource={users} columns={columns} rowKey="id" pagination={paginationConfig} loading={loading} />
+
+      <Modal
+        title="Confirm Delete"
+        visible={deleteModalVisible}
+        onOk={confirmDelete}
+        onCancel={() => setDeleteModalVisible(false)}
+        okText="Delete"
+        cancelText="Cancel"
+      >
+        <p>Are you sure you want to delete this user?</p>
+      </Modal>
     </div>
   );
 };

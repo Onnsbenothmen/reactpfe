@@ -1,0 +1,73 @@
+/* Profil.css */
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.profile-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 500px;
+}
+
+.profile-info h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-image {
+  margin-bottom: 20px;
+  text-align: center; /* Ajouté pour centrer l'image */
+}
+
+.profile-image img {
+  max-width: 10px; /* Ajustez la taille maximale de l'image */
+  max-height: 10px; /* Ajustez la taille maximale de l'image */
+  border-radius: 50%;
+  border: 2px solid #1890ff; /* Bordure autour de l'image */
+}
+
+.profile-image input {
+  display: none;
+}
+
+.edit-profile-btn,
+.save-profile-btn {
+  background-color: #1890ff;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 16px;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-profile-btn:hover,
+.save-profile-btn:hover {
+  background-color: #40a9ff;
+}
+
+.edit-profile-btn {
+  margin-right: 10px;
+}
+
+.save-profile-btn {
+  background-color: #52c41a;
+}
+
+.save-profile-btn:disabled {
+  background-color: #d9d9d9;
+  cursor: not-allowed;
+}
