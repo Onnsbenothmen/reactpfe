@@ -1,0 +1,83 @@
+/* ListeVisiteEvaluation.css */
+.titre-liste {
+    color: #64748B; /* Bleu-gris doux */
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.card-programme {
+    transition: box-shadow .3s;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #F0F4F8; /* Fond clair pour les cartes */
+}
+
+.card-programme:hover {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Couleur orange pour l'en-tête des cartes */
+.ant-card-head {
+    background: linear-gradient(135deg, #F27438 0%, #F7A278 100%);
+    color: white !important;
+}
+
+/* Styles pour les boutons avec la nouvelle couleur orange */
+.ant-btn-primary {
+    border-color: #F27438;
+    background-color: #F27438;
+}
+
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+    background-color: #F7A278; /* Orange clair pour le survol */
+    border-color: #F7A278;
+}
+
+/* Vous pouvez également mettre à jour d'autres éléments qui utilisent la couleur bleue précédente */
+.titre-liste {
+    color: #F27438; /* Orange pour les titres */
+}
+
+/* Ajoutez d'autres styles personnalisés ici */
+
+
+
+
+
+/* Arrière-plan de la page */
+body {
+    background-color: #E2E8F0; /* Couleur de fond douce pour la page entière */
+    font-family: 'Open Sans', sans-serif; /* Police douce et moderne */
+}
+
+/* Ajoutez d'autres styles personnalisés ici */
+/* Ajout d'une animation de survol pour les cartes */
+.card-programme:hover {
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+/* Utilisation d'un gradient de couleur pour l'en-tête des cartes */
+.ant-card-head {
+    background: linear-gradient(135deg, #94A3B8 0%, #CBD5E1 100%);
+    color: white !important;
+}
+
+/* Styles pour les boutons avec effet de survol */
+.ant-btn-primary:hover,
+.ant-btn-primary:focus {
+    background-color: #ADCBE3; /* Bleu clair pour le survol */
+    border-color: #ADCBE3;
+    transform: scale(1.05);
+}
+
+/* Responsive design pour les mobiles */
+@media (max-width: 768px) {
+    .titre-liste {
+        font-size: 1.5rem; /* Taille de police plus grande pour les titres */
+    }
+    .card-programme {
+        margin-bottom: 1rem; /* Espacement plus grand entre les cartes */
+    }
+}
