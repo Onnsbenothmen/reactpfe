@@ -124,16 +124,7 @@ const UpdateAdmin = () => {
             onChange={handleChange}
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="directeur">Directeur :</label>
-          <input
-            id="directeur"
-            type="text"
-            name="directeur"
-            value={admin.directeur}
-            onChange={handleChange}
-          />
-        </div>
+       
         <Button
   type="primary"
   onClick={() => handleUpdate()}>

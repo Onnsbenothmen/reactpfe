@@ -34,11 +34,7 @@ const Dashboard = () => {
     fetchUserRole();
   }, []);
 
-  useEffect(() => {
-    if (userRole === 'président') {
-      history.push('/dashboardpr');
-    }
-  }, [userRole, history]);
+
 
   const handleLogin = () => {
     history.push('/login');
@@ -96,11 +92,8 @@ const Dashboard = () => {
         <Layout.Sider theme="dark" width={200} collapsible>
           <Menu mode="inline" theme="dark" selectedKeys={[selectedMenuItem]} onClick={handleMenuItemClick} style={{ background: '#001529', color: '#fff' }}>
             <Menu.Item key="1" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Gestion des Instances</Menu.Item>
-            <Menu.Item key="2" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Créer une Instance</Menu.Item>
-            <Menu.SubMenu key="sub1" icon={<UserOutlined />} title="Utilisateurs">
-              <Menu.Item key="4.1">Liste des utilisateurs</Menu.Item>
-              <Menu.Item key="4.2">Ajouter un utilisateur</Menu.Item>
-            </Menu.SubMenu>
+            <Menu.Item key="4.1" icon={<UserOutlined />} style={{ color: '#fff' }}>Gestion des utilisateurs</Menu.Item>
+
             <Menu.Item key="3" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Liste des Rôles</Menu.Item>
           </Menu>
         </Layout.Sider>

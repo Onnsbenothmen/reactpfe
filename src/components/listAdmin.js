@@ -13,7 +13,7 @@ const AdminPubliqueList = () => {
 
   const fetchAdmins = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/admins');
+      const response = await axios.get('http://127.0.0.1:5000/users?role=Administration%20Publique');
       setAdmins(response.data.data);
     } catch (error) {
       console.error('Erreur lors de la récupération des administrateurs:', error);
@@ -69,11 +69,7 @@ const AdminPubliqueList = () => {
       dataIndex: 'email',
       key: 'email',
     },
-    {
-      title: 'Directeur',
-      dataIndex: 'directeur',
-      key: 'directeur',
-    },
+   
     {
       title: 'Actions',
       key: 'actions',
