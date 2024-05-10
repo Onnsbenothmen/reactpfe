@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Avatar } from 'antd';
 import { useHistory } from 'react-router-dom';
-import { UserOutlined, PlusOutlined, UnorderedListOutlined, LogoutOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import Profile from './UpdateProfil';
-import UserProfile from './Propos';
-
-import ListAdmin from './listAdmin';
-import CreateProgrammeVisite from './ProgrammeVisite/CreateProgrammeVisite';
-import ConseillerList from './ConseillerList';
+import UserProfile from './Propos'; 
 import { useAuth } from '../hooks/AuthContext';
-import SignUp from './Signup';
-import PVReunions from './PVReunions/PVReunions';
-const { Header, Sider, Content } = Layout;
 
-const DashboardPr = () => {
+const { Sider, Content } = Layout;
+
+const ConseilleDashboard = () => {
     const history = useHistory();
     const { user } = useAuth();
 
@@ -32,10 +27,8 @@ const DashboardPr = () => {
     };
 
     const handleLogout = () => {
-        // Effacer l'état du menu dans localStorage lors de la déconnexion
         localStorage.removeItem('selectedMenuItem');
-        // Rediriger vers la page de connexion
-        history.push('/Login');
+        history.push('/Profile');
     };
 
     const renderContent = () => {
@@ -43,17 +36,7 @@ const DashboardPr = () => {
             case '1':
                 return <Profile />;
             case '2':
-                return <SignUp />;
-            case '3':
-                return <ListAdmin />;
-            case '4':
-                return <CreateProgrammeVisite />;
-            case '6':
-                return <ConseillerList />;
-            case '7':
                 return <UserProfile />;
-            case '8':
-                    return <PVReunions/>;
             default:
                 return null;
         }
@@ -67,17 +50,8 @@ const DashboardPr = () => {
                 </div>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={[selectedMenuItem]} onClick={({ key }) => handleMenuItemClick(key)}>
                     <Menu.Item key="1" icon={<UserOutlined />}>Profile</Menu.Item>
-                    <Menu.Item key="2" icon={<PlusOutlined />}>ajouter utilisateur</Menu.Item>
-                    <Menu.Item key="3" icon={<UnorderedListOutlined />}>liste administrations</Menu.Item>
-                    <Menu.Item key="6" icon={<UnorderedListOutlined />}>liste Conseilles Locaux</Menu.Item>
-                    <Menu.Item key="4" icon={<UnorderedListOutlined />}>Visite d'évaluation</Menu.Item>
-                    <Menu.Item key="7" icon={<UnorderedListOutlined />}>A propos</Menu.Item>
-                    <Menu.Item key="8" icon={<UnorderedListOutlined />}>Réunions et PVs </Menu.Item>
-
+                    <Menu.Item key="2" icon={<UserOutlined />}>A Propos</Menu.Item>
                 </Menu>
-                <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-                    <Button block type="primary" onClick={handleLogout} icon={<LogoutOutlined />}>Déconnexion</Button>
-                </div>
             </Sider>
             <Layout>
                 <Content style={{ margin: '16px' }}>
@@ -90,4 +64,4 @@ const DashboardPr = () => {
     );
 };
 
-export default DashboardPr;
+export default ConseilleDashboard;
