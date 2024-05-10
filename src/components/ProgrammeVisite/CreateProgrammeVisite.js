@@ -189,8 +189,4 @@ Cordialement,
     );
 };
 
-<<<<<<< HEAD
 export default CreateProgrammeVisite;
-=======
-export default CreateProgrammeVisite;
->>>>>>> ac2c1389012ae6032624b110112c700dc0446d19

@@ -141,10 +141,6 @@ const handleFormSubmit = async (values) => {
             dataIndex: 'ville',
             key: 'ville',
             filters: [
-<<<<<<< HEAD
-                { text: 'Toutes les villes', value: '' },
-=======
->>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
                 { text: 'Nabeul', value: 'Nabeul' },
                 { text: 'Tunis', value: 'Tunis' },
                 { text: 'Sousse', value: 'Sousse' },

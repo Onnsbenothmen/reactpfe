@@ -1,11 +1,5 @@
-<<<<<<< HEAD
 .titre-liste {
     color: #64748B; /*Bleu-gris doux */
-=======
-/* ListeVisiteEvaluation.css */
-.titre-liste {
-    color: #64748B; /* Bleu-gris doux */
->>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
     text-align: center;
     margin-bottom: 20px;
 }
@@ -44,15 +38,7 @@
     color: #F27438; /* Orange pour les titres */
 }
 
-<<<<<<< HEAD
 /*Ajoutez d'autres styles personnalisés ici */
-=======
-/* Ajoutez d'autres styles personnalisés ici */
-
-
-
-
->>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
 
 /* Arrière-plan de la page */
 body {

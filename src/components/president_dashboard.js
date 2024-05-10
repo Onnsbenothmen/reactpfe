@@ -6,11 +6,7 @@ import Profile from './UpdateProfil';
 import UserProfile from './Propos';
 
 import ListAdmin from './listAdmin';
-<<<<<<< HEAD
 import CreateProgrammeVisite from './ProgrammeVisite/CreateProgrammeVisite';
-=======
-import CreateProgramme from '../CreateProgramme';
->>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
 import ConseillerList from './ConseillerList';
 import { useAuth } from '../hooks/AuthContext';
 import SignUp from './Signup';
@@ -51,11 +47,7 @@ const DashboardPr = () => {
             case '3':
                 return <ListAdmin />;
             case '4':
-<<<<<<< HEAD
                 return <CreateProgrammeVisite />;
-=======
-                return <CreateProgramme />;
->>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
             case '6':
                 return <ConseillerList />;
             case '7':

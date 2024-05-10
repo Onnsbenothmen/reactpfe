@@ -26,15 +26,9 @@ const Login = () => {
       login(profile, token);
       if (profile.role === 'président') {
         history.push('/president_dashboard');
-<<<<<<< HEAD
       } else if(profile.role === 'super admin') {
         history.push('/superAdmin_dashboard');
       } else if(profile.role === 'conseiller') {
-=======
-      } else if(profile.role === 'admin') {
-        history.push('/admin_dashboard');
-      } else if(profile.role === 'Conseille Local') {
->>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
         history.push('/conseille');
       } else {
         console.error('Role non géré:', profile.role);
