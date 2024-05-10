@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Typography, Button, Select, Modal, Form, Input } from 'antd';
 import axios from 'axios';
+import { Typography, Select, Modal, Form, Input, Table, Button, Card, message } from 'antd';
 import Swal from 'sweetalert2';
+import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { Title } = Typography;
 const { Option } = Select;
@@ -14,22 +16,21 @@ const InstanceList = () => {
     const [instanceToEdit, setInstanceToEdit] = useState(null);
     const [form] = Form.useForm();
 
-    useEffect(() => {
-        // Fetch instances from the API
-        const fetchInstances = async () => {
-            try {
-                const response = await axios.get('http://localhost:5000/instances');
-                setInstances(response.data.data);
-            } catch (error) {
-                console.error('Error fetching instances:', error);
-            }
-        };
+    const fetchInstances = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/instances');
+            setInstances(response.data.data);
+            setFilteredInstances(response.data.data);
+        } catch (error) {
+            console.error('Error fetching instances:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchInstances();
     }, []);
 
     useEffect(() => {
-        // Filter instances based on selected city
         if (selectedCity) {
             const filtered = instances.filter(instance => instance.ville.toLowerCase() === selectedCity.toLowerCase());
             setFilteredInstances(filtered);
@@ -42,7 +43,9 @@ const InstanceList = () => {
         setInstanceToEdit(instance);
         form.setFieldsValue({
             president_email: instance.president_email,
-            council_name: instance.council_name,
+            instance_name: instance.instance_name,
+            nombre_conseille: instance.nombre_conseille,
+            gouvernement: instance.gouvernement,
             ville: instance.ville,
             active: instance.active
         });
@@ -69,6 +72,9 @@ const InstanceList = () => {
             }
         });
     };
+    const handleOpenModal = () => {
+        setModalVisible(true);
+    };
 
     const handleModalClose = () => {
         setModalVisible(false);
@@ -80,73 +86,124 @@ const InstanceList = () => {
         setSelectedCity(value);
     };
 
-    const handleFormSubmit = async (values) => {
-        try {
+   // Dans InstanceList.js
+
+// Fonction pour gérer la modification d'une instance
+const handleUpdate = (instance) => {
+    setInstanceToEdit(instance);
+    form.setFieldsValue({
+        president_email: instance.president_email,
+        instance_name: instance.instance_name,
+        nombre_conseille: instance.nombre_conseille,
+        gouvernement: instance.gouvernement,
+        ville: instance.ville,
+        active: instance.active
+    });
+    setModalVisible(true);
+};
+
+// Fonction pour soumettre le formulaire
+const handleFormSubmit = async (values) => {
+    try {
+        if (instanceToEdit) {
+            // Si instanceToEdit est défini, cela signifie que nous mettons à jour une instance existante
             await axios.put(`http://localhost:5000/instances/${instanceToEdit.id}`, values);
+            // Mettre à jour l'état des instances après la modification
             const updatedInstances = instances.map(instance =>
                 instance.id === instanceToEdit.id ? { ...instance, ...values } : instance
             );
             setInstances(updatedInstances);
-            handleModalClose();
-        } catch (error) {
-            console.error('Error updating instance:', error);
+            setFilteredInstances(updatedInstances);
+        } else {
+            // Sinon, nous ajoutons une nouvelle instance
+            await axios.post('http://localhost:5000/addInstances', values);
+            // Mettre à jour la liste des instances après l'ajout
+            fetchInstances();
         }
-    };
+        // Fermer le modal après avoir soumis le formulaire avec succès
+        handleModalClose();
+    } catch (error) {
+        // Gérer les erreurs de manière appropriée
+        console.error(error);
+        message.error('Une erreur s\'est produite lors de la soumission du formulaire.');
+    }
+};
+
+
+    const columns = [
+        { title: 'ID de l\'instance', dataIndex: 'id', key: 'id' },
+        { title: 'Email du président', dataIndex: 'president_email', key: 'president_email' },
+        { title: 'Nom de l\'instance', dataIndex: 'instance_name', key: 'instance_name' },
+        { title: 'Nombre de conseillé', dataIndex: 'nombre_conseille', key: 'nombre_conseille' },
+        { title: 'Gouvernement', dataIndex: 'gouvernement', key: 'gouvernement' },
+        {
+            title: 'Ville',
+            dataIndex: 'ville',
+            key: 'ville',
+            filters: [
+                { text: 'Nabeul', value: 'Nabeul' },
+                { text: 'Tunis', value: 'Tunis' },
+                { text: 'Sousse', value: 'Sousse' },
+            ],
+            onFilter: (value, record) => record.ville.toLowerCase() === value.toLowerCase()
+        },
+        { title: 'Active', dataIndex: 'active', key: 'active', render: active => (active ? 'Oui' : 'Non') },
+        { title: 'Créé à', dataIndex: 'created_at', key: 'created_at' },
+        {
+            title: 'Actions',
+            dataIndex: '',
+            key: 'actions',
+            render: (_, record) => (
+                <span>
+                    <EditOutlined style={{ color: '#1890ff', marginRight: 8 }} onClick={() => handleEdit(record)} />
+                    <DeleteOutlined style={{ color: 'red' }} onClick={() => handleDelete(record.id)} />
+                </span>
+            ),
+        },
+    ];
 
     return (
-        <div style={{ padding: '20px' }}>
-            <Title level={2} style={{ color: '#1890ff' }}>All Instances</Title>
-            <Select
-                defaultValue=""
-                style={{ width: 200, marginBottom: 16 }}
-                onChange={handleCityChange}
-                placeholder="Select a city"
-            >
-                <Option value="">All Cities</Option>
-                <Option value="Nabeul">Nabeul</Option>
-                <Option value="Tunis">Tunis</Option>
-                <Option value="Sousse">Sousse</Option>
-            </Select>
-            <Row gutter={[16, 16]}>
-                {filteredInstances.map((instance, index) => (
-                    <Col span={8} key={index}>
-                        <div style={{ backgroundColor: '#f0f2f5', padding: '16px', borderRadius: '8px', boxShadow: '0px 0px 10px 0px rgba(0,0,0,0.1)' }}>
-                            <Title level={4} style={{ marginBottom: '12px', color: '#1890ff' }}>Instance ID: {instance.id}</Title>
-                            <p>President Email: {instance.president_email}</p>
-                            <p>Council Name: {instance.council_name}</p>
-                            <p>Ville: {instance.ville}</p>
-                            <p>Active: {instance.active ? <span style={{ color: 'green' }}>Yes</span> : <span style={{ color: 'red' }}>No</span>}</p>
-                            <p>Created At: {instance.created_at}</p>
-                            <Button type="primary" onClick={() => handleEdit(instance)}>Edit</Button>
-                            <Button type="danger" onClick={() => handleDelete(instance.id)} style={{ marginLeft: '8px', backgroundColor:'red', color:'white' }}>Delete</Button>
-                        </div>
-                    </Col>
-                ))}
-            </Row>
+        <div className="container py-4">
+            <div className="text-center">
+                <Title level={2} className="text-primary mb-4">Toutes les instances</Title>
+            </div>
+            <div style={{ marginBottom: '16px' }}>
+          
+                <Button type="primary" icon={<PlusOutlined />} onClick={handleOpenModal}  style={{ backgroundColor: 'green', borderColor: 'green' }}>Ajouter une instance</Button>
+            </div>
+            <Table columns={columns} dataSource={filteredInstances} />
             <Modal
-                title="Edit Instance"
+                title="Ajouter une instance"
                 visible={modalVisible}
                 onCancel={handleModalClose}
                 footer={null}
             >
-                <Form form={form} onFinish={handleFormSubmit}>
-                    <Form.Item name="president_email" label="President Email">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="council_name" label="Council Name">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="ville" label="Ville">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="active" label="Active">
-                        <Select>
-                            <Select.Option value={true}>Yes</Select.Option>
-                            <Select.Option value={false}>No</Select.Option>
-                        </Select>
-                    </Form.Item>
-                    <Button type="primary" htmlType="submit" >Save</Button>
-                </Form>
+                <Card>
+                    <Form form={form} onFinish={handleFormSubmit}>
+                        <Form.Item name="president_email" label="Email du président">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="instance_name" label="Nom de l'instance">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="nombre_conseille" label="Nombre de conseillé">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="gouvernement" label="Gouvernement">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="ville" label="Ville">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="active" label="Active">
+                            <Select>
+                                <Select.Option value={true}>Oui</Select.Option>
+                                <Select.Option value={false}>Non</Select.Option>
+                            </Select>
+                        </Form.Item>
+                        <Button type="primary" htmlType="submit">Enregistrer</Button>
+                    </Form>
+                </Card>
             </Modal>
         </div>
     );
