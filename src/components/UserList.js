@@ -43,7 +43,11 @@ const UserList = () => {
 
   const fetchUsers = async () => {
     try {
+<<<<<<< HEAD
       const response = await axios.get('http://127.0.0.1:5000/Allusers');
+=======
+      const response = await axios.get('http://127.0.0.1:5000/users');
+>>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
       setUsers(response.data.data.map(user => ({ ...user, isButtonDisabled: false })));
     } catch (error) {
       console.error('Erreur lors de la récupération des utilisateurs:', error);

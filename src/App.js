@@ -12,9 +12,8 @@ import DashboardPr from './components/president_dashboard';
 import 'antd/dist/reset.css';
 import AdminPubliqueList from './components/listAdmin';
 import UpdateAdmin from './components/UpdateAdmin';
-import CreateProgramme from './CreateProgramme';
-import ListAllPrograms from './ListAllPrograms';
-import ListProgramsConseilleur from './ListProgramsConseilleur';
+
+
 import ListProgramsForAdmin from './ListProgramsForAdmin';
 import ConseillerList from './components/ConseillerList';
 import UpdateConseilleur from './UpdateConseilleur';
@@ -34,8 +33,19 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ArchivedUsers from './components/ArchivedUsers';
+<<<<<<< HEAD
 import CreateProgrammeVisite from './components/ProgrammeVisite/CreateProgrammeVisite';
 import ListeVisiteEvaluation  from './components/ProgrammeVisite/ListeVisiteEvaluation';
+=======
+
+
+
+import CreateProgrammeVisite from './components/ProgrammeVisite/CreateProgrammeVisite';
+import ListeVisiteEvaluation  from './components/ProgrammeVisite/ListeVisiteEvaluation';
+import ApercuRapportPDF from './components/ProgrammeVisite/ApercuRapportPDF';
+
+
+>>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
 
 
 const App = () => {
@@ -59,10 +69,7 @@ const App = () => {
         <Route path="/Updateprofile" component={UpdateProfile}/>
         <Route path="/ListAdmin" component={AdminPubliqueList}/>
         <Route path="/UpdateAdmin/:id" component={UpdateAdmin}/>
-        <Route path="/CreateProgramme" component={CreateProgramme}/>
-        <Route path="/ListProgramsConseilleur/:id" component={ListProgramsConseilleur}/>
-        <Route path="/ListAllPrograms" component={ListAllPrograms}/>
-        <Route path="/ListProgramsForAdmin/:id" component={ListProgramsForAdmin}/>
+        
         <Route path="/ConseillerList" component={ConseillerList}/>
         <Route path="/conseilleur/:id" component={UpdateConseilleur}/>
         <Route path="/UserProfile" component={UserProfile}/>
@@ -74,11 +81,30 @@ const App = () => {
         <Route path="/forgot_password" component={ForgotPassword} />
         <Route path="/ResetPassword" component={ResetPassword}/>
         <Route path="/archivedUsers" component={ArchivedUsers}/>
+<<<<<<< HEAD
         <Route path="/CreateProgrammeVisite" component={CreateProgrammeVisite}/>
         <Route path="/ListeVisiteEvaluation" component={ListeVisiteEvaluation}/>
         <ToastContainer />
 
 
+=======
+        <ToastContainer />
+
+
+
+
+        <Route path="/CreateProgrammeVisite" component={CreateProgrammeVisite}/>
+        <Route path="/ListeVisiteEvaluation" component={ListeVisiteEvaluation}/>
+        <Route path="/ApercuRapportPDF" component={ApercuRapportPDF}/>
+
+
+        
+
+        
+
+
+        
+>>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
         </Switch>
       </Router>
     </AuthProvider>

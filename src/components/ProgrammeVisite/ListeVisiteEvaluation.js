@@ -189,8 +189,11 @@ const handleViewReport = async (record) => {
               <Button type="primary" icon={<HeartTwoTone />} onClick={() => handleCreateEvaluation(record)}>Créer évaluation</Button>
               {/* Bouton "Voir rapport" */}
               <Button type="primary" onClick={() => handleViewReport(record)}>Voir rapport</Button>
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
             </span>
           ),
         },
@@ -275,4 +278,8 @@ const handleViewReport = async (record) => {
     );
 };
 
+<<<<<<< HEAD
 export default ListeVisiteEvaluation;
+=======
+export default ListeVisiteEvaluation;
+>>>>>>> ac2c1389012ae6032624b110112c700dc0446d19
