@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, Avatar, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router-dom'; // Importez useParams depuis react-router-dom
+
 
 const Signup = () => {
+  const { newUserId } = useParams(); // Obtenez newUserId à partir des paramètres d'URL
   const [formStep, setFormStep] = useState(1);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -39,7 +42,7 @@ const Signup = () => {
     formDataToSend.append('password', password);
 
     try {
-      const response = await fetch('http://localhost:5000/signup', {
+      const response = await fetch(`http://localhost:5000/signup/${newUserId}`, {
         method: 'POST',
         body: formDataToSend,
       });

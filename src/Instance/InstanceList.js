@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Typography, Select, Modal, Form, Input, Table, Button, Card, message } from 'antd';
+import { Typography, Modal, Form, Input, Table, Button, Card, message, Select } from 'antd';
 import Swal from 'sweetalert2';
-import { EditOutlined, DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { Title } = Typography;
@@ -15,6 +15,53 @@ const InstanceList = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [instanceToEdit, setInstanceToEdit] = useState(null);
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [searchResults, setSearchResults] = useState([]);
+    const [noResultsFound, setNoResultsFound] = useState(false);
+    const [inputVisible, setInputVisible] = useState(false); // État pour contrôler la visibilité de l'entrée
+
+
+    const handleIconClick = () => {
+        setInputVisible(true); // Afficher l'entrée lorsque l'icône est cliquée
+    };
+
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+    };
+
+
+    const searchInstances = async (term) => {
+        try {
+            const response = await axios.get(`http://localhost:5000/instances/search?q=${term}`);
+            setSearchResults(response.data);
+            setNoResultsFound(response.data.length === 0); // Mettre à jour l'état noResultsFound
+        } catch (error) {
+            console.error('Error searching instances:', error);
+        }
+    };
+    
+    const handleSearchChange = (event) => {
+        const newSearchTerm = event.target.value;
+        setSearchTerm(newSearchTerm);
+    
+        // Déclencher la recherche en temps réel avec le terme de recherche actuel
+        searchInstances(newSearchTerm);
+    };
+    
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            if (searchTerm === '') {
+                setSearchResults([]);
+                return;
+            }
+            searchInstances(searchTerm);
+        }, 300);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, [searchTerm]);
 
     const fetchInstances = async () => {
         try {
@@ -34,8 +81,10 @@ const InstanceList = () => {
         if (selectedCity) {
             const filtered = instances.filter(instance => instance.ville.toLowerCase() === selectedCity.toLowerCase());
             setFilteredInstances(filtered);
+            setSearchResults(filtered);
         } else {
             setFilteredInstances(instances);
+            setSearchResults(instances);
         }
     }, [selectedCity, instances]);
 
@@ -72,6 +121,7 @@ const InstanceList = () => {
             }
         });
     };
+
     const handleOpenModal = () => {
         setModalVisible(true);
     };
@@ -86,49 +136,38 @@ const InstanceList = () => {
         setSelectedCity(value);
     };
 
-   // Dans InstanceList.js
+    const handleUpdate = (instance) => {
+        setInstanceToEdit(instance);
+        form.setFieldsValue({
+            president_email: instance.president_email,
+            instance_name: instance.instance_name,
+            nombre_conseille: instance.nombre_conseille,
+            gouvernement: instance.gouvernement,
+            ville: instance.ville,
+            active: instance.active
+        });
+        setModalVisible(true);
+    };
 
-// Fonction pour gérer la modification d'une instance
-const handleUpdate = (instance) => {
-    setInstanceToEdit(instance);
-    form.setFieldsValue({
-        president_email: instance.president_email,
-        instance_name: instance.instance_name,
-        nombre_conseille: instance.nombre_conseille,
-        gouvernement: instance.gouvernement,
-        ville: instance.ville,
-        active: instance.active
-    });
-    setModalVisible(true);
-};
-
-// Fonction pour soumettre le formulaire
-const handleFormSubmit = async (values) => {
-    try {
-        if (instanceToEdit) {
-            // Si instanceToEdit est défini, cela signifie que nous mettons à jour une instance existante
-            await axios.put(`http://localhost:5000/instances/${instanceToEdit.id}`, values);
-            // Mettre à jour l'état des instances après la modification
-            const updatedInstances = instances.map(instance =>
-                instance.id === instanceToEdit.id ? { ...instance, ...values } : instance
-            );
-            setInstances(updatedInstances);
-            setFilteredInstances(updatedInstances);
-        } else {
-            // Sinon, nous ajoutons une nouvelle instance
-            await axios.post('http://localhost:5000/addInstances', values);
-            // Mettre à jour la liste des instances après l'ajout
-            fetchInstances();
+    const handleFormSubmit = async (values) => {
+        try {
+            if (instanceToEdit) {
+                await axios.put(`http://localhost:5000/instances/${instanceToEdit.id}`, values);
+                const updatedInstances = instances.map(instance =>
+                    instance.id === instanceToEdit.id ? { ...instance, ...values } : instance
+                );
+                setInstances(updatedInstances);
+                setFilteredInstances(updatedInstances);
+            } else {
+                await axios.post('http://localhost:5000/addInstances', values);
+                fetchInstances();
+            }
+            handleModalClose();
+        } catch (error) {
+            console.error(error);
+            message.error('Une erreur s\'est produite lors de la soumission du formulaire.');
         }
-        // Fermer le modal après avoir soumis le formulaire avec succès
-        handleModalClose();
-    } catch (error) {
-        // Gérer les erreurs de manière appropriée
-        console.error(error);
-        message.error('Une erreur s\'est produite lors de la soumission du formulaire.');
-    }
-};
-
+    };
 
     const columns = [
         { title: 'ID de l\'instance', dataIndex: 'id', key: 'id' },
@@ -167,11 +206,34 @@ const handleFormSubmit = async (values) => {
             <div className="text-center">
                 <Title level={2} className="text-primary mb-4">Toutes les instances</Title>
             </div>
+             <div>
+            {inputVisible ? (
+                <Input
+                    value={searchTerm}
+                    onChange={handleInputChange}
+                    onPressEnter={searchInstances}
+                    onBlur={() => setInputVisible(false)} // Cacher l'entrée lorsque l'utilisateur perd le focus
+                />
+            ) : (
+                <SearchOutlined
+                    style={{ color: 'rgba(0,0,0,.25)' }}
+                    onClick={handleIconClick}
+                />
+            )}
+        </div>
+    
             <div style={{ marginBottom: '16px' }}>
-          
-                <Button type="primary" icon={<PlusOutlined />} onClick={handleOpenModal}  style={{ backgroundColor: 'green', borderColor: 'green' }}>Ajouter une instance</Button>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={handleOpenModal}
+                    style={{ backgroundColor: 'green', borderColor: 'green' }}
+                >
+                    Ajouter une instance
+                </Button>
             </div>
-            <Table columns={columns} dataSource={filteredInstances} />
+            {noResultsFound && <div>Aucun résultat trouvé.</div>} {/* Ajoutez la ligne ici */}
+            <Table columns={columns} dataSource={searchTerm ? (noResultsFound ? [] : searchResults) : filteredInstances} />
             <Modal
                 title="Ajouter une instance"
                 visible={modalVisible}
@@ -197,8 +259,8 @@ const handleFormSubmit = async (values) => {
                         </Form.Item>
                         <Form.Item name="active" label="Active">
                             <Select>
-                                <Select.Option value={true}>Oui</Select.Option>
-                                <Select.Option value={false}>Non</Select.Option>
+                                <Option value={true}>Oui</Option>
+                                <Option value={false}>Non</Option>
                             </Select>
                         </Form.Item>
                         <Button type="primary" htmlType="submit">Enregistrer</Button>
@@ -207,6 +269,6 @@ const handleFormSubmit = async (values) => {
             </Modal>
         </div>
     );
-};
+};    
 
 export default InstanceList;

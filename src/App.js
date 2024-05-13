@@ -12,18 +12,13 @@ import DashboardPr from './components/president_dashboard';
 import 'antd/dist/reset.css';
 import AdminPubliqueList from './components/listAdmin';
 import UpdateAdmin from './components/UpdateAdmin';
-
-
-import ListProgramsForAdmin from './ListProgramsForAdmin';
 import ConseillerList from './components/ConseillerList';
 import UpdateConseilleur from './UpdateConseilleur';
 import { AuthProvider } from './hooks/AuthContext';
 import UserProfile from './components/Propos';
 import Propos from './components/Propos';
 import UpdateProfile from './components/UpdateProfil';
-import AuthContext from './hooks/AuthContext';
 import ConseilleDashboard from './components/conseille_dashboard';
-import ProtectedRoute from './ProtectedRoute';
 import PVReunions from './components/PVReunions/PVReunions';
 import Presentielle from './components/PVReunions/Presentielle';
 import Meet from './components/PVReunions/Meet';
@@ -35,6 +30,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ArchivedUsers from './components/ArchivedUsers';
 import CreateProgrammeVisite from './components/ProgrammeVisite/CreateProgrammeVisite';
 import ListeVisiteEvaluation  from './components/ProgrammeVisite/ListeVisiteEvaluation';
+import ActiveUsers from './components/ActiveUsers'
+import InactivePresidents from './components/listNonInscrit'
 
 
 const App = () => {
@@ -47,8 +44,9 @@ const App = () => {
             <Redirect to="/login" />
           </Route>
           <Route path="/login" component={Login} />
-          <Route path="/signup" component={SignUp} />
-          <Route path="/listFund" component={FundsList} />
+          <Route path="/signup/:newUserId">
+  <SignUp />
+</Route>          <Route path="/listFund" component={FundsList} />
           <Route path="/UserList" component={UserList} />
           <Route path="/InstanceCreate" component={InstanceCreationForm}/>
           <Route path="/InstanceList" component={InstanceList}/>
@@ -72,6 +70,8 @@ const App = () => {
         <Route path="/archivedUsers" component={ArchivedUsers}/>
         <Route path="/CreateProgrammeVisite" component={CreateProgrammeVisite}/>
         <Route path="/ListeVisiteEvaluation" component={ListeVisiteEvaluation}/>
+        <Route path="/ActiveUsers" componenet={ActiveUsers} />
+        <Route path="/InactivePresidents" component={InactivePresidents} />
         <ToastContainer />
 
 
