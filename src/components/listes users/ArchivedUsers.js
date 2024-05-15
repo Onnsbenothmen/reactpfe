@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Avatar } from 'antd';
 import axios from 'axios';
 
 const ArchivedUsers = () => {
@@ -9,7 +9,6 @@ const ArchivedUsers = () => {
     const fetchArchivedUsers = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:5000/api/archived-user');
-        console.log(response.data); // Vérifiez la structure de la réponse dans la console
         setUsers(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération des utilisateurs archivés :', error);
@@ -21,9 +20,7 @@ const ArchivedUsers = () => {
 
   const handleActivate = async (id) => {
     try {
-      // Envoyer une requête au serveur pour réactiver l'utilisateur avec l'ID donné
       await axios.post(`http://127.0.0.1:5000/users/${id}/activate`);
-      // Rafraîchir la liste des utilisateurs archivés après réactivation
       const updatedUsers = users.filter(user => user.id !== id);
       setUsers(updatedUsers);
     } catch (error) {
@@ -32,6 +29,14 @@ const ArchivedUsers = () => {
   };
 
   const columns = [
+    {
+      title: 'Avatar',
+      dataIndex: 'profile_image',
+      key: 'avatar',
+      render: (text) => (
+        text ? <Avatar src={`http://127.0.0.1:5000/static/uploads/${text}`} /> : <Avatar />
+      ),
+    },
     {
       title: 'ID',
       dataIndex: 'id',
@@ -72,9 +77,12 @@ const ArchivedUsers = () => {
   ];
 
   return (
-    <div>
+    <div className="container mt-4" style={{ textAlign: 'left' }}>
       <h2>Liste des Utilisateurs archivés</h2>
-      <Table dataSource={users} columns={columns} />
+      <br></br>
+      <div>
+        <Table dataSource={users} columns={columns} />
+      </div>
     </div>
   );
 };

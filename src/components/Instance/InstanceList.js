@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Typography, Modal, Form, Input, Table, Button, Card, message, Select } from 'antd';
 import Swal from 'sweetalert2';
-import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined ,MailOutlined} from '@ant-design/icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { Title } = Typography;
@@ -100,6 +100,8 @@ const InstanceList = () => {
         });
         setModalVisible(true);
     };
+    const     handleSendEmail = (id) => {}
+
 
     const handleDelete = (id) => {
         Swal.fire({
@@ -121,6 +123,38 @@ const InstanceList = () => {
             }
         });
     };
+    const sendEmailToPresident = async (presidentEmail, instanceName, ville, newUserId) => {
+        try {
+          await axios.post('http://localhost:5000/sendEmailToPresident', {
+            president_email: presidentEmail,
+            instance_name: instanceName,
+            ville: ville,
+            new_user_id: newUserId
+          });
+          console.log('Email sent successfully');
+          // Afficher un message de succès ou effectuer une autre action en cas de réussite
+        } catch (error) {
+          console.error('Error sending email:', error);
+          // Gérer les erreurs ici
+        }
+      };
+      const resendEmailToPresident = async (id) => {
+        try {
+            // Faites une requête au backend pour renvoyer l'e-mail au président en utilisant l'identifiant de l'instance
+            await axios.post(`http://localhost:5000/resendEmailToPresident/${id}`);
+    
+            // Afficher l'alerte pour indiquer que l'e-mail a été renvoyé avec succès
+            Swal.fire({
+                icon: 'success',
+                title: 'Succès!',
+                text: 'E-mail renvoyé avec succès',
+            });
+        } catch (error) {
+            console.error('Error resending email:', error);
+            // Gérer les erreurs ici
+        }
+    };
+    
 
     const handleOpenModal = () => {
         setModalVisible(true);
@@ -151,18 +185,20 @@ const InstanceList = () => {
 
     const handleFormSubmit = async (values) => {
         try {
-            if (instanceToEdit) {
-                await axios.put(`http://localhost:5000/instances/${instanceToEdit.id}`, values);
-                const updatedInstances = instances.map(instance =>
-                    instance.id === instanceToEdit.id ? { ...instance, ...values } : instance
-                );
-                setInstances(updatedInstances);
-                setFilteredInstances(updatedInstances);
-            } else {
-                await axios.post('http://localhost:5000/addInstances', values);
-                fetchInstances();
-            }
+            // Ajout d'une nouvelle instance
+            await axios.post('http://localhost:5000/addInstances', values);
+            
+            // Actualisation de la liste des instances après ajout réussi
+            fetchInstances();
+    
             handleModalClose();
+    
+            // Afficher l'alerte pour indiquer que l'instance a été ajoutée avec succès
+            Swal.fire({
+                icon: 'success',
+                title: 'Succès!',
+                text: 'Instance ajoutée et e-mail envoyé avec succès',
+            });
         } catch (error) {
             console.error(error);
             message.error('Une erreur s\'est produite lors de la soumission du formulaire.');
@@ -188,6 +224,16 @@ const InstanceList = () => {
         },
         { title: 'Active', dataIndex: 'active', key: 'active', render: active => (active ? 'Oui' : 'Non') },
         { title: 'Créé à', dataIndex: 'created_at', key: 'created_at' },
+        {
+            title: 'Envoyer un e-mail',
+            dataIndex: '',
+            key: 'send_email',
+            render: (_, record) => (
+                <span>
+                    <MailOutlined style={{ color: 'blue', marginRight: 8 }} onClick={() => resendEmailToPresident(record.id)}  />
+                </span>
+            ),
+        },
         {
             title: 'Actions',
             dataIndex: '',
@@ -263,7 +309,7 @@ const InstanceList = () => {
                                 <Option value={false}>Non</Option>
                             </Select>
                         </Form.Item>
-                        <Button type="primary" htmlType="submit">Enregistrer</Button>
+                        <Button type="primary" htmlType="submit"  >Enregistrer</Button>
                     </Form>
                 </Card>
             </Modal>

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
-import { useAuth } from '../hooks/AuthContext'; 
+import { useAuth } from '../../hooks/AuthContext'; 
 import { Avatar, Button, Card, message, Form, Input } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import './UpdateProfil.css'; 
 
 const UpdateProfil = () => {
   const location = useLocation();
@@ -30,18 +29,21 @@ const UpdateProfil = () => {
       if (image) {
         formData.append('image', image);
       }
-
+  
       const response = await fetch(`http://localhost:5000/update_profile/${user.id}`, {
         method: 'PUT',
         body: formData,
       });
-
+  
       if (response.ok) {
         const updatedUser = await response.json();
         setUser(updatedUser);
-        message.success('Profil mis à jour avec succès !');
-        setCurrentImageUrl(URL.createObjectURL(image));
-        setEditing(false);
+        if (image) {
+          setCurrentImageUrl(URL.createObjectURL(image));
+        }
+        // setEditing(false); // Comment this line
+        message.success('Profil mis à jour avec succès !'); // Alerte de confirmation
+        
       } else {
         throw new Error('Failed to update profile');
       }
@@ -50,6 +52,8 @@ const UpdateProfil = () => {
       message.error('Une erreur s\'est produite lors de la mise à jour du profil.');
     }
   };
+  
+  
 
   const handleImageChange = (event) => {
     const selectedImage = event.target.files[0];
@@ -73,19 +77,26 @@ const UpdateProfil = () => {
   };
 
   return (
-    <div className='profile-container'>
+    <div style={{ maxWidth: '500px', margin: 'auto', padding: '20px', backgroundColor: '#f0f2f5', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
       {user ? (
         <Card className='profile-card' title="Profil de l'utilisateur">
           <div className='profile-info'>
-            <div className='avatar-container'>
-              <input type='file' accept='image/*' onChange={handleImageChange} />
-              <div className="preview-image-container" onClick={handleImageClick}>
-                {previewImage || user.profile_image ? (
-                  <img src={previewImage || `http://127.0.0.1:5000/static/uploads/${user.profile_image}`} alt="Preview" className='preview-image' />
-                ) : (
-                  <Avatar size={120} icon={<UserOutlined />} className='profile-avatar' />
-                )}
-              </div>
+            <div className='avatar-container' style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
+              <input type='file' accept='image/*' onChange={handleImageChange} style={{ display: 'none' }} id="profile-image-input" />
+              <label htmlFor="profile-image-input">
+                <div className="preview-image-container" style={{ cursor: 'pointer' }}>
+                  {previewImage || user.profile_image ? (
+                    <img 
+                      src={previewImage || `http://127.0.0.1:5000/static/uploads/${user.profile_image}`} 
+                      alt="Preview" 
+                      className='preview-image' 
+                      style={{ width: '100px', height: '100px', borderRadius: '50%' }}
+                    />                
+                  ) : (
+                    <Avatar size={100} icon={<UserOutlined />} className='profile-avatar' />
+                  )}
+                </div>
+              </label>
             </div>
             {editing && (
               <Form layout="vertical" onFinish={handleSave} initialValues={user}>
@@ -107,7 +118,9 @@ const UpdateProfil = () => {
               </Form>
             )}
             {!editing && (
+              <Form.Item>
               <Button type='primary' onClick={() => setEditing(true)} className='edit-profile-btn'>Modifier le Profil</Button>
+            </Form.Item>
             )}
           </div>
         </Card>

@@ -1,0 +1,40 @@
+body {
+    background-color: white; /* ou toute autre couleur de votre choix */
+}
+
+.personal-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Pour aligner à gauche */
+    position: fixed;
+    top:    10;
+    left: 10; /* Ajouté pour aligner à gauche */
+}
+
+.profile-container {
+    display: flex;
+    flex-direction: row; /* Pour aligner horizontalement */
+    align-items: flex-start; /* Pour aligner en haut */
+}
+
+.avatar-info-container {
+    margin-right: 20px; /* Ajoute un espace entre l'image et le contenu */
+}
+
+.avatar-round {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%; /* 50% pour un cercle */
+}
+
+.user-info {
+    width: 100%;
+    max-width: 600px;
+}
+
+@media (min-width: 900px) {
+    .personal-profile {
+        flex-direction: row; /* Pour aligner horizontalement sur les écrans plus larges */
+        align-items: flex-start; /* Pour aligner l'image en haut de la page */
+    }
+}

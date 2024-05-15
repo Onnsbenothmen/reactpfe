@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Avatar } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { UserOutlined, PlusOutlined, UnorderedListOutlined, LogoutOutlined } from '@ant-design/icons';
-import Profile from './UpdateProfil';
-import UserProfile from './Propos';
+import Profile from './Profil/UpdateProfil';
+import UserProfile from './Profil/Propos';
 
 import ListAdmin from './listAdmin';
 import CreateProgrammeVisite from './ProgrammeVisite/CreateProgrammeVisite';
 import ConseillerList from './ConseillerList';
 import { useAuth } from '../hooks/AuthContext';
-import SignUp from './Signup';
+import SignUp from './Connexion/Signup';
 import PVReunions from './PVReunions/PVReunions';
 const { Header, Sider, Content } = Layout;
 

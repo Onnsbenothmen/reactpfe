@@ -3,12 +3,12 @@ import axios from 'axios';
 import { Layout, Button, Menu } from 'antd';
 import { DashboardOutlined, UserOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
-import InstanceList from '../Instance/InstanceList';
-import UserList from './UserList';
-import ArchivedUsers from './ArchivedUsers';
-import ActiveUsers from './ActiveUsers';
+import InstanceList from './Instance/InstanceList';
+import UserList from './listes users/UserList';
+import ArchivedUsers from './listes users/ArchivedUsers';
 import RolesList from './Role/roleList';
-import SignUp from './Signup';
+import SignUp from './Connexion/Signup';
+import InactivePresidents from './listes users/listNonInscrit';
 
 const { Header, Sider, Content } = Layout;
 
@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [showUserList, setShowUserList] = useState(false);
   const [showSignUp, setShowSignUp] = useState(false);
   const [showArchivedUsers, setShowArchivedUsers] = useState(false);
-  const [showActiveUsers, setShowActiveUsers] = useState(false);
+  const [showInactivePresidents, setShowInactivePresidents] = useState(false);
   const [subMenuOpen, setSubMenuOpen] = useState(false);
   const menuRef = useRef();
 
@@ -57,7 +57,7 @@ const Dashboard = () => {
         setShowUserList(false);
         setShowSignUp(false);
         setShowArchivedUsers(false);
-        setShowActiveUsers(false);
+        setShowInactivePresidents(false);
         break;
       case '2':
         setShowInstanceList(false);
@@ -66,7 +66,7 @@ const Dashboard = () => {
         setShowUserList(false);
         setShowSignUp(false);
         setShowArchivedUsers(false);
-        setShowActiveUsers(false);
+        setShowInactivePresidents(false);
         break;
       case '3':
         setShowInstanceList(false);
@@ -75,7 +75,7 @@ const Dashboard = () => {
         setShowUserList(false);
         setShowSignUp(false);
         setShowArchivedUsers(false);
-        setShowActiveUsers(false);
+        setShowInactivePresidents(false);
         break;
       case '4.1':
         setShowInstanceList(false);
@@ -84,7 +84,7 @@ const Dashboard = () => {
         setShowUserList(true);
         setShowSignUp(false);
         setShowArchivedUsers(false);
-        setShowActiveUsers(false);
+        setShowInactivePresidents(false);
         break;
       case '4.2':
         setShowInstanceList(false);
@@ -93,21 +93,25 @@ const Dashboard = () => {
         setShowUserList(false);
         setShowSignUp(false);
         setShowArchivedUsers(true);
-        setShowActiveUsers(false);
+        setShowInactivePresidents(false);
         break;
-      case '4.3':
+
+      case '4.4':
         setShowInstanceList(false);
         setShowAddInstanceForm(false);
         setShowRolesList(false);
         setShowUserList(false);
         setShowSignUp(false);
         setShowArchivedUsers(false);
-        setShowActiveUsers(true);
+        setShowInactivePresidents(true);
         break;
       default:
         break;
     }
-    setSubMenuOpen(false);
+    // On ferme le sous-menu seulement si l'utilisateur ne se trouve pas dans la catégorie "Gestion des utilisateurs"
+    if (!e.key.startsWith('4')) {
+      setSubMenuOpen(false);
+    }
   };
 
   return (
@@ -129,18 +133,19 @@ const Dashboard = () => {
           >
             <Menu.Item key="1" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Gestion des Instances</Menu.Item>
             <Menu.SubMenu key="sub1" icon={<UserOutlined />} title="Gestion des utilisateurs">
-              <Menu.Item key="4.1" style={{ color: '#fff' }}>Tous les utilisateurs</Menu.Item>
+              <Menu.Item key="4.1" style={{ color: '#fff' }}>Utilisateur Activée</Menu.Item>
               <Menu.Item key="4.2" style={{ color: '#fff' }}>Utilisateurs Désactivés</Menu.Item>
-              <Menu.Item key="4.3" style={{ color: '#fff' }}>Utilisateurs activés</Menu.Item>
+              <Menu.Item key="4.4" style={{ color: '#fff' }}>Utilisateurs non inscrits</Menu.Item>
+
             </Menu.SubMenu>
+          
             <Menu.Item key="3" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Liste des Rôles</Menu.Item>
           </Menu>
         </Layout.Sider>
       </Sider>
       <Layout>
         <Header style={{ background: '#fff', padding: '0 16px', display: 'flex', alignItems: 'center', boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)' }}>
-          <div style={{ flex: '1' }}>
-          </div>
+          <div style={{ flex: '1' }}></div>
           <Button type="primary" onClick={handleLogin}>Déconnexion</Button>
         </Header>
         <Content style={{ margin: '16px', background: '#fff', minHeight: '360px', borderRadius: '5px', boxShadow: '0 2px 8px rgba(0, 21, 41, 0.08)' }}>
@@ -149,8 +154,8 @@ const Dashboard = () => {
           {showRolesList && <RolesList />}
           {showUserList && <UserList filter="active" />}
           {showArchivedUsers && <ArchivedUsers />}
-          {showActiveUsers && <ActiveUsers />}
           {showSignUp && <SignUp />}
+          {showInactivePresidents && <InactivePresidents />}
         </Content>
       </Layout>
     </Layout>

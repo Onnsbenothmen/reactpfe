@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Avatar } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
-import Profile from './UpdateProfil';
-import UserProfile from './Propos'; 
+import Profile from './Profil/UpdateProfil';
+import UserProfile from './Profil/Propos'; 
 import { useAuth } from '../hooks/AuthContext';
 
 const { Sider, Content } = Layout;

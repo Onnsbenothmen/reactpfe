@@ -46,16 +46,7 @@ const UserList = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://127.0.0.1:5000/users/${id}`);
-      setUsers(users.filter(user => user.id !== id));
-      message.success('Utilisateur supprimé avec succès');
-    } catch (error) {
-      console.error('Erreur lors de la suppression de l\'utilisateur:', error);
-      message.error('Erreur lors de la suppression de l\'utilisateur');
-    }
-  };
+
 
   const handleUpdate = (user) => {
     setSelectedUser(user);
@@ -74,6 +65,7 @@ const UserList = () => {
       if (response.status === 200) {
         message.success('Utilisateur mis à jour avec succès.');
         handleCloseModal();
+        fetchUsers(); // Rafraîchir la liste des utilisateurs après la mise à jour
       } else {
         message.error('Erreur lors de la mise à jour de l\'utilisateur.');
       }
@@ -82,6 +74,8 @@ const UserList = () => {
       message.error('Une erreur s\'est produite lors de la mise à jour de l\'utilisateur.');
     }
   };
+  
+  
 
   const UpdateUserForm = ({ user, closeModal, updateUser }) => {
     const [form] = Form.useForm();
@@ -102,6 +96,10 @@ const UserList = () => {
         <Form.Item name="email" label="Email">
           <Input />
         </Form.Item>
+        <Form.Item name="phoneNumber" label="Numéro de téléphone">
+          <Input />
+        </Form.Item>
+
         <Button type="primary" htmlType="submit">
           Enregistrer
         </Button>
@@ -152,6 +150,12 @@ const UserList = () => {
       key: 'email',
     },
     {
+      title: 'Téléphone',
+      dataIndex: 'phoneNumber',
+      key: 'phoneNumber',
+    },
+
+    {
       title: 'Actions',
       key: 'actions',
       render: (text, user) => (
@@ -159,9 +163,7 @@ const UserList = () => {
           <Button type="primary" onClick={() => handleUpdate(user)}>
             Modifier
           </Button>
-          <Button type="danger" onClick={() => handleDelete(user.id)}>
-            Supprimer
-          </Button>
+      
           <Button disabled={user.isButtonDisabled} style={{ backgroundColor: 'orange', color: 'black' }} onClick={() => handleDisable(user.id)}>Désactiver</Button>
         </span>
       ),

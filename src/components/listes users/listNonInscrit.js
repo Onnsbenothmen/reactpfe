@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './listNonInscrit.css'; // Importation des styles CSS
+import { ExclamationCircleOutlined } from '@ant-design/icons'; // Import de l'icône
+import './/listNonInscrit.css'; // Importation des styles CSS
 
 const InactivePresidents = () => {
   const [inactivePresidents, setInactivePresidents] = useState([]);
+
 
   useEffect(() => {
     fetchInactivePresidents();
@@ -46,34 +48,22 @@ const InactivePresidents = () => {
     }
   };
 
-  const handleResend = (email) => {
-    console.log(`Email à renvoyer : ${email}`);
-    // Appel de la fonction pour envoyer l'email
-    sendEmailToPresident(email);
-  };
-
   return (
     <div className="container mt-4">
-      <h2 className="title">Liste des Présidents Inactifs</h2>
+      <h2 className="title">Liste des Présidents non inscrits</h2>
+      <br></br>
       <table className="presidents-table">
         <thead>
           <tr>
+            <th scope="col">ID</th>
             <th scope="col">Email du Président</th>
-            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
           {inactivePresidents.map((presidentEmail, index) => (
             <tr key={index}>
-              <td>{presidentEmail}</td>
-              <td>
-                {sentEmails[presidentEmail] && (
-                  <span className="tick">&#10004;</span>
-                )}
-                <button className="resend-btn" onClick={() => handleResend(presidentEmail)}>
-                  Renvoyer
-                </button>
-              </td>
+              <td>{index + 1}</td>
+              <td><ExclamationCircleOutlined /> {presidentEmail}</td> {/* Icône ajoutée ici */}
             </tr>
           ))}
         </tbody>
