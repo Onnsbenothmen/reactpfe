@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Avatar } from 'antd';
 import { useHistory } from 'react-router-dom';
-import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
-import Profile from './Profil/UpdateProfil';
-import UserProfile from './Profil/Propos'; 
-import { useAuth } from '../hooks/AuthContext';
+import { UserOutlined, PlusOutlined, UnorderedListOutlined, LogoutOutlined } from '@ant-design/icons';
+import Profile from '../Profil/UpdateProfil';
+import UserProfile from '../Profil/Propos';
 
-const { Sider, Content } = Layout;
+import ListAdmin from '../listAdmin';
+import ListeVisiteEvaluation from '../ProgrammeVisite/ListeVisiteEvaluation';
+import ConseillerList from './ConseillerList';
+import { useAuth } from '../../hooks/AuthContext';
+import SignUp from '../Connexion/Signup';
+import AddCounselorsForm from './add_conseillers';
+const { Header, Sider, Content } = Layout;
 
-const ConseilleDashboard = () => {
+const DashboardPr = () => {
     const history = useHistory();
     const { user } = useAuth();
 
@@ -27,8 +32,10 @@ const ConseilleDashboard = () => {
     };
 
     const handleLogout = () => {
+        // Effacer l'état du menu dans localStorage lors de la déconnexion
         localStorage.removeItem('selectedMenuItem');
-        history.push('/Profile');
+        // Rediriger vers la page de connexion
+        history.push('/Login');
     };
 
     const renderContent = () => {
@@ -36,7 +43,17 @@ const ConseilleDashboard = () => {
             case '1':
                 return <Profile />;
             case '2':
+                return <AddCounselorsForm user={user} />
+                ;
+            case '3':
+                return <ListAdmin />;
+            case '4':
+                return <ListeVisiteEvaluation />;
+            case '6':
+                return <ConseillerList />;
+            case '7':
                 return <UserProfile />;
+           
             default:
                 return null;
         }
@@ -49,9 +66,17 @@ const ConseilleDashboard = () => {
                     <Avatar size={64} src={user && user.profile_image ? `http://127.0.0.1:5000/static/uploads/${user.profile_image}` : <UserOutlined />} />
                 </div>
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']} selectedKeys={[selectedMenuItem]} onClick={({ key }) => handleMenuItemClick(key)}>
-                    <Menu.Item key="1" icon={<UserOutlined />}>Profile</Menu.Item>
-                    <Menu.Item key="2" icon={<UserOutlined />}>A Propos</Menu.Item>
+                    <Menu.Item key="1" icon={<UserOutlined />}>update</Menu.Item>
+                    <Menu.Item key="2" icon={<PlusOutlined />}>ajouter conseilles</Menu.Item>
+                    <Menu.Item key="3" icon={<UnorderedListOutlined />}>liste administrations</Menu.Item>
+                    <Menu.Item key="6" icon={<UnorderedListOutlined />}>liste Conseilles Locaux</Menu.Item>
+                    <Menu.Item key="4" icon={<UnorderedListOutlined />}>Visite d'évaluation</Menu.Item>
+                    <Menu.Item key="7" icon={<UnorderedListOutlined />}>A propos</Menu.Item>
+
                 </Menu>
+                <div style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                    <Button block type="primary" onClick={handleLogout} icon={<LogoutOutlined />}>Déconnexion</Button>
+                </div>
             </Sider>
             <Layout>
                 <Content style={{ margin: '16px' }}>
@@ -64,4 +89,4 @@ const ConseilleDashboard = () => {
     );
 };
 
-export default ConseilleDashboard;
+export default DashboardPr;

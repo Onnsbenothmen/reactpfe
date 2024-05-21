@@ -1,6 +1,6 @@
 // AuthContext.js
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 // Création du contexte d'authentification
 const AuthContext = createContext();
@@ -12,7 +12,7 @@ export const useAuth = () => {
 
 // Composant fournisseur du contexte d'authentification
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // State pour stocker les informations de l'utilisateur connecté
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")) || null); // State pour stocker les informations de l'utilisateur connecté
   const [token, setToken] = useState(null); // State pour stocker le token d'authentification
 
   // Fonction pour connecter l'utilisateur
@@ -20,6 +20,12 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
     setToken(authToken);
   };
+
+  useEffect(()=> {
+    debugger;
+
+    localStorage.setItem("user", JSON.stringify(user))
+  },[user])
 
   // Fonction pour déconnecter l'utilisateur
   const logout = () => {

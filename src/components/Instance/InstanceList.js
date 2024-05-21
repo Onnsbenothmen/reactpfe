@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Typography, Modal, Form, Input, Table, Button, Card, message, Select } from 'antd';
 import Swal from 'sweetalert2';
-import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined ,MailOutlined} from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined, MailOutlined } from '@ant-design/icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const { Title } = Typography;
@@ -40,15 +40,15 @@ const InstanceList = () => {
             console.error('Error searching instances:', error);
         }
     };
-    
+
     const handleSearchChange = (event) => {
         const newSearchTerm = event.target.value;
         setSearchTerm(newSearchTerm);
-    
+
         // Déclencher la recherche en temps réel avec le terme de recherche actuel
         searchInstances(newSearchTerm);
     };
-    
+
     useEffect(() => {
         const timer = setTimeout(() => {
             if (searchTerm === '') {
@@ -100,7 +100,7 @@ const InstanceList = () => {
         });
         setModalVisible(true);
     };
-    const     handleSendEmail = (id) => {}
+    const handleSendEmail = (id) => { }
 
 
     const handleDelete = (id) => {
@@ -125,24 +125,24 @@ const InstanceList = () => {
     };
     const sendEmailToPresident = async (presidentEmail, instanceName, ville, newUserId) => {
         try {
-          await axios.post('http://localhost:5000/sendEmailToPresident', {
-            president_email: presidentEmail,
-            instance_name: instanceName,
-            ville: ville,
-            new_user_id: newUserId
-          });
-          console.log('Email sent successfully');
-          // Afficher un message de succès ou effectuer une autre action en cas de réussite
+            await axios.post('http://localhost:5000/sendEmailToPresident', {
+                president_email: presidentEmail,
+                instance_name: instanceName,
+                ville: ville,
+                new_user_id: newUserId
+            });
+            console.log('Email sent successfully');
+            // Afficher un message de succès ou effectuer une autre action en cas de réussite
         } catch (error) {
-          console.error('Error sending email:', error);
-          // Gérer les erreurs ici
+            console.error('Error sending email:', error);
+            // Gérer les erreurs ici
         }
-      };
-      const resendEmailToPresident = async (id) => {
+    };
+    const resendEmailToPresident = async (id) => {
         try {
             // Faites une requête au backend pour renvoyer l'e-mail au président en utilisant l'identifiant de l'instance
             await axios.post(`http://localhost:5000/resendEmailToPresident/${id}`);
-    
+
             // Afficher l'alerte pour indiquer que l'e-mail a été renvoyé avec succès
             Swal.fire({
                 icon: 'success',
@@ -154,7 +154,7 @@ const InstanceList = () => {
             // Gérer les erreurs ici
         }
     };
-    
+
 
     const handleOpenModal = () => {
         setModalVisible(true);
@@ -187,12 +187,12 @@ const InstanceList = () => {
         try {
             // Ajout d'une nouvelle instance
             await axios.post('http://localhost:5000/addInstances', values);
-            
+
             // Actualisation de la liste des instances après ajout réussi
             fetchInstances();
-    
+
             handleModalClose();
-    
+
             // Afficher l'alerte pour indiquer que l'instance a été ajoutée avec succès
             Swal.fire({
                 icon: 'success',
@@ -230,7 +230,7 @@ const InstanceList = () => {
             key: 'send_email',
             render: (_, record) => (
                 <span>
-                    <MailOutlined style={{ color: 'blue', marginRight: 8 }} onClick={() => resendEmailToPresident(record.id)}  />
+                    <MailOutlined style={{ color: 'blue', marginRight: 8 }} onClick={() => resendEmailToPresident(record.id)} />
                 </span>
             ),
         },
@@ -248,26 +248,26 @@ const InstanceList = () => {
     ];
 
     return (
-        <div className="container py-4">
+        <div className=" py-4">
             <div className="text-center">
                 <Title level={2} className="text-primary mb-4">Toutes les instances</Title>
             </div>
-             <div>
-            {inputVisible ? (
-                <Input
-                    value={searchTerm}
-                    onChange={handleInputChange}
-                    onPressEnter={searchInstances}
-                    onBlur={() => setInputVisible(false)} // Cacher l'entrée lorsque l'utilisateur perd le focus
-                />
-            ) : (
-                <SearchOutlined
-                    style={{ color: 'rgba(0,0,0,.25)' }}
-                    onClick={handleIconClick}
-                />
-            )}
-        </div>
-    
+            <div>
+                {inputVisible ? (
+                    <Input
+                        value={searchTerm}
+                        onChange={handleInputChange}
+                        onPressEnter={searchInstances}
+                        onBlur={() => setInputVisible(false)} // Cacher l'entrée lorsque l'utilisateur perd le focus
+                    />
+                ) : (
+                    <SearchOutlined
+                        style={{ color: 'rgba(0,0,0,.25)' }}
+                        onClick={handleIconClick}
+                    />
+                )}
+            </div>
+
             <div style={{ marginBottom: '16px' }}>
                 <Button
                     type="primary"
@@ -315,6 +315,6 @@ const InstanceList = () => {
             </Modal>
         </div>
     );
-};    
+};
 
 export default InstanceList;

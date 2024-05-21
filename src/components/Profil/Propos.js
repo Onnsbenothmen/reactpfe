@@ -76,7 +76,9 @@ const handleCloseEditProfileModal = () => {
           <Title level={3}>{user.firstName} {user.lastName}</Title><br></br><br></br>
           <Text><MailOutlined /> {user.email}</Text><br></br><br></br>
           <Text><PhoneOutlined /> {user.phoneNumber}</Text><br></br><br></br>
+          <Text><HomeOutlined />{user.instance_name}</Text><br></br><br></br>
           <Text><HomeOutlined /> {user.address}</Text><br></br><br></br><br></br><br></br><br></br>
+          
           <div className="action-buttons">
             <Button type="primary" onClick={handleOpenChangePasswordModal}>Changer de mot de passe</Button>
             <Button type="primary" onClick={handleOpenEditProfileModal}>Modifier le profil</Button>

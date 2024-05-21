@@ -17,25 +17,25 @@
 
 /* Couleur orange pour l'en-tête des cartes */
 .ant-card-head {
-    background: linear-gradient(135deg, #F27438 0%, #F7A278 100%);
+    background: linear-gradient(135deg, #212E53 0%, #212E53 100%);
     color: white !important;
 }
 
 /* Styles pour les boutons avec la nouvelle couleur orange */
 .ant-btn-primary {
-    border-color: #F27438;
-    background-color: #F27438;
+    border-color: #212E53;
+    background-color: #212E53;
 }
 
 .ant-btn-primary:hover,
 .ant-btn-primary:focus {
-    background-color: #F7A278; /* Orange clair pour le survol */
-    border-color: #F7A278;
+    background-color: #212E53; /* Orange clair pour le survol */
+    border-color: #212E53;
 }
 
 /* Vous pouvez également mettre à jour d'autres éléments qui utilisent la couleur bleue précédente */
 .titre-liste {
-    color: #F27438; /* Orange pour les titres */
+    color: #212E53; /* Orange pour les titres */
 }
 
 /*Ajoutez d'autres styles personnalisés ici */
@@ -67,7 +67,7 @@ body {
     transform: scale(1.05);
 }
 
-/* Responsive design pour les mobiles */
+/* Responsive design pour les mobiles*/
 @media (max-width: 768px) {
     .titre-liste {
         font-size: 1.5rem; /* Taille de police plus grande pour les titres */

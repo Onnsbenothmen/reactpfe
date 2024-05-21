@@ -22,7 +22,7 @@ const Login = () => {
         setLoading(false);
         return;
       }
-
+      debugger;
       login(profile, token);
       if (profile.role === 'président') {
         history.push('/president_dashboard');

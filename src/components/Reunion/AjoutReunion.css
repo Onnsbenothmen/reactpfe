@@ -1,0 +1,32 @@
+.container {
+    width: 50%;
+    margin: 0 auto;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .message {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .conditional-field {
+    display: none;
+  }
+  
+  .ant-form-item-control-input-content {
+    display: flex;
+  }
+  
+  .conditional-field.ant-form-item-control-input-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .ant-form-item-control-input-content > .ant-input {
+    margin-right: 10px;
+  }
+  

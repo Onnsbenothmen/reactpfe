@@ -120,14 +120,14 @@ const Dashboard = () => {
         <div style={{ textAlign: 'center', padding: '20px 0' }}>
           <img src="/OIP.jpg" alt="Nom de l'application" style={{ width: '200px', height: '50px' }} />
         </div>
-        <Layout.Sider theme="dark" width={200} collapsible>
-          <Menu 
-            ref={menuRef} 
-            mode="inline" 
-            theme="dark" 
-            selectedKeys={[selectedMenuItem]} 
-            onClick={handleMenuItemClick} 
-            onOpenChange={handleSubMenuOpenChange} 
+        {/* <Layout.Sider theme="dark" width={200} collapsible> */}
+          <Menu
+            ref={menuRef}
+            mode="inline"
+            theme="dark"
+            selectedKeys={[selectedMenuItem]}
+            onClick={handleMenuItemClick}
+            onOpenChange={handleSubMenuOpenChange}
             openKeys={subMenuOpen ? ['sub1'] : []}
             style={{ background: '#001529', color: '#fff' }}
           >
@@ -138,10 +138,10 @@ const Dashboard = () => {
               <Menu.Item key="4.4" style={{ color: '#fff' }}>Utilisateurs non inscrits</Menu.Item>
 
             </Menu.SubMenu>
-          
+
             <Menu.Item key="3" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Liste des Rôles</Menu.Item>
           </Menu>
-        </Layout.Sider>
+        {/* </Layout.Sider> */}
       </Sider>
       <Layout>
         <Header style={{ background: '#fff', padding: '0 16px', display: 'flex', alignItems: 'center', boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)' }}>

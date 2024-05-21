@@ -79,7 +79,7 @@ const UpdateProfil = () => {
   return (
     <div style={{ maxWidth: '500px', margin: 'auto', padding: '20px', backgroundColor: '#f0f2f5', borderRadius: '8px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
       {user ? (
-        <Card className='profile-card' title="Profil de l'utilisateur">
+       
           <div className='profile-info'>
             <div className='avatar-container' style={{ display: 'flex', justifyContent: 'center', position: 'relative' }}>
               <input type='file' accept='image/*' onChange={handleImageChange} style={{ display: 'none' }} id="profile-image-input" />
@@ -123,7 +123,6 @@ const UpdateProfil = () => {
             </Form.Item>
             )}
           </div>
-        </Card>
       ) : (
         <p>Chargement...</p>
       )}

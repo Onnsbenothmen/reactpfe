@@ -1,0 +1,39 @@
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .reunion-item {
+    border: 1px solid #f0f0f0;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+  }
+  
+  .reunion-item h3 {
+    margin-top: 0;
+  }
+  
+  .reunion-item p {
+    margin: 5px 0;
+  }
+  
+  .reunion-item ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .reunion-item ul li {
+    margin: 2px 0;
+  }
+  
+  .absent-row {
+    background-color: #f0f0f0; /* Gris clair */
+  }

@@ -11,7 +11,8 @@ const CreateProgrammeVisite = () => {
     const [form] = Form.useForm();
     const [conseillers, setConseillers] = useState([]);
     const [adminEmails, setAdminEmails] = useState([]);
-    const [emailContent, setEmailContent] = useState('');
+    const [emailContentConseillers, setEmailContentConseillers] = useState('');
+    const [emailContentAdmin, setEmailContentAdmin] = useState('');
     const [modalVisible, setModalVisible] = useState(false);
     const [emailObjective, setEmailObjective] = useState('Invitation à la Visite d’Évaluation');
 
@@ -27,7 +28,7 @@ const CreateProgrammeVisite = () => {
 
         const fetchAdminEmails = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:5000/users?role=adminPublique');
+                const response = await axios.get('http://127.0.0.1:5000/users?role=directeur');
                 setAdminEmails(response.data);
             } catch (error) {
                 console.error(error);
@@ -40,8 +41,11 @@ const CreateProgrammeVisite = () => {
 
     const handleConfirm = async () => {
         try {
-            // Générer le contenu de l'e-mail
-            generateEmailContent();
+            // Générer le contenu de l'e-mail pour les conseillers
+            generateEmailContentConseillers();
+            
+            // Générer le contenu de l'e-mail pour l'administration publique
+            generateEmailContentAdmin();
             
             // Obtenir les valeurs du formulaire
             const formData = form.getFieldsValue();
@@ -55,33 +59,37 @@ const CreateProgrammeVisite = () => {
                 description: formData.description,
                 contacts_urgence: formData.contacts_urgence,
                 conseiller_email: formData.conseiller_email,
-                admin_email: formData.admin_email[0] // Prendre le premier email de l'administration publique
+                admin_email: formData.admin_email, // Utiliser l'e-mail de l'administration publique sélectionné
+                nomProgramme: formData.nomProgramme,
+                nomAdminPublique: formData.nomAdminPublique
             };
-    
+
             // Envoyer les données au serveur Flask
             const response = await axios.post('http://127.0.0.1:5000/programme_visite', requestData);
-    
-            // Vérifier la réponse du serveur
-            if (response.status === 201) {
-                console.log("Programme de visite créé avec succès");
-                // Ajouter ici toute autre logique de redirection ou de feedback utilisateur
-            } else if (response.status === 404) {
-                console.log("Utilisateur non trouvé");
-                // Gérer l'erreur côté React, par exemple, afficher un message d'erreur à l'utilisateur
-            }
-    
+
             // Envoyer l'e-mail aux conseillers choisis
             const selectedConseillers = formData.conseiller_email;
-            const emailData = {
+            const emailDataConseillers = {
                 subject: emailObjective,
-                content: emailContent
+                content: emailContentConseillers
             };
-            const responseEmail = await axios.post('http://127.0.0.1:5000/send_email', {
+            const responseEmailConseillers = await axios.post('http://127.0.0.1:5000/send_email', {
                 conseillers: selectedConseillers,
-                emailData: emailData
+                emailData: emailDataConseillers
             });
-            console.log(responseEmail.data);
-    
+            console.log(responseEmailConseillers.data);
+
+            // Envoyer l'e-mail à l'administration publique
+            const adminEmailData = {
+                subject: emailObjective,
+                content: emailContentAdmin
+            };
+            const responseAdminEmail = await axios.post('http://127.0.0.1:5000/send_email', {
+                emailData: adminEmailData,
+                admin_email: formData.admin_email
+            });
+            console.log(responseAdminEmail.data);
+
             // Fermer la modale après la création
             setModalVisible(false);
         } catch (error) {
@@ -89,18 +97,14 @@ const CreateProgrammeVisite = () => {
         }
     };
 
-    
-    
-
-    const generateEmailContent = () => {
-        const { periode_debut, periode_fin, criteres_evaluation, lieu, description, contacts_urgence } = form.getFieldsValue();
+    const generateEmailContentConseillers = () => {
+        const { periode_debut, periode_fin, criteres_evaluation, lieu, description, contacts_urgence, nomProgramme, nomAdminPublique } = form.getFieldsValue();
 
         // Formater les dates avec moment.js en français
         const formattedStartDate = moment(periode_debut).format("dddd D MMMM [à] HH:mm");
         const formattedEndDate = moment(periode_fin).format("dddd D MMMM [à] HH:mm");
 
-        const content = `${emailObjective}
-Cher(e) Conseiller(e),
+        const content = `Cher(e) Conseiller(e),
 J'espère que ce message vous trouve en bonne santé.
 Dans le cadre de nos efforts continus pour améliorer la gouvernance locale, nous avons planifié une visite d'évaluation.
 Cette visite est une occasion précieuse pour nous de mieux comprendre nos opérations,
@@ -112,17 +116,50 @@ ${formattedStartDate} au ${formattedEndDate}
 - Critères d'évaluation : ${criteres_evaluation}
 - Description : ${description}
 - En cas d’indisponibilité, veuillez me contacter au numéro suivant : ${contacts_urgence}
+Nom du Programme : ${nomProgramme}
+Nom de l'Administration Publique : ${nomAdminPublique}
 Cordialement,
 [Votre nom ou celui de votre organisation]`;
 
-        setEmailContent(content);
+        setEmailContentConseillers(content);
     };
+
+    const generateEmailContentAdmin = async () => {
+        const { nomProgramme, periode_debut, periode_fin, lieu, criteres_evaluation, description, contacts_urgence, admin_email, nomAdminPublique } = form.getFieldsValue();
+    
+        // Formater les dates avec moment.js en français
+        const formattedStartDate = moment(periode_debut).format("dddd D MMMM [à] HH:mm");
+        const formattedEndDate = moment(periode_fin).format("dddd D MMMM [à] HH:mm");
+    
+        try {
+            const response = await axios.get(`http://127.0.0.1:5000/get_admin_name?admin_email=${admin_email}`);
+            const { firstName, lastName } = response.data;
+            
+            const content = `Cher(e) ${firstName} ${lastName} de ${nomAdminPublique},
+    
+            J'espère que ce message vous trouve en pleine forme.
+    
+            Je tiens à vous informer que nous avons récemment organisé une visite dans le cadre de notre Programme d'Évaluation des Conseils Locaux. Cette initiative vise à évaluer et améliorer les performances de nos conseils locaux en vue de renforcer notre engagement envers la communauté.
+            Période : du ${formattedStartDate} au ${formattedEndDate}
+            Lieu : ${lieu}
+            Description : ${description}
+    
+            Cordialement,
+            [Votre nom ou celui de votre organisation]`;
+    
+            setEmailContentAdmin(content);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    
+    
 
     const onFinish = () => {
         setModalVisible(true); // Afficher la modale pour confirmation
-        generateEmailContent(); // Générer le contenu de l'email
+        generateEmailContentConseillers(); // Générer le contenu de l'e-mail pour les conseillers
+        generateEmailContentAdmin(); // Générer le contenu de l'e-mail pour l'administration
     };
-
 
     return (
         <>
@@ -153,11 +190,18 @@ Cordialement,
                     </Select>
                 </Form.Item>
                 <Form.Item name="admin_email" label="Email de l'Administration Publique" rules={[{ required: true }]}>
-                    <Select placeholder="Sélectionnez un email">
-                        {adminEmails.map((admin) => (
-                            <Option key={admin.id} value={admin.email}>{admin.email}</Option>
-                        ))}
-                    </Select>
+    <Select placeholder="Sélectionnez un email">
+        {adminEmails.map((admin) => (
+            <Option key={admin.id} value={admin.email}>{admin.email}</Option>
+        ))}
+    </Select>
+</Form.Item>
+
+                <Form.Item name="nomProgramme" label="Nom du Programme" rules={[{ required: true }]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item name="nomAdminPublique" label="Nom de l'Administration Publique" rules={[{ required: true }]}>
+                    <Input />
                 </Form.Item>
                 <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -181,8 +225,11 @@ Cordialement,
                 <Form.Item label="Objet de l'email">
                     <Input value={emailObjective} onChange={(e) => setEmailObjective(e.target.value)} />
                 </Form.Item>
-                <Form.Item label="Contenu de l'email">
-                    <TextArea value={emailContent} rows={10} readOnly />
+                <Form.Item label="Contenu de l'email pour les conseillers">
+                    <TextArea value={emailContentConseillers} rows={10} readOnly />
+                </Form.Item>
+                <Form.Item label="Contenu de l'email pour l'administration">
+                    <TextArea value={emailContentAdmin} rows={10} readOnly />
                 </Form.Item>
             </Modal>
         </>

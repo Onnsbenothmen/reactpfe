@@ -4,24 +4,24 @@ import { Button, Table, Avatar } from 'antd';
 import axios from 'axios';
 
 const ConseillerList = () => {
-  const [admins, setAdmins] = useState([]);
+  const [conseillers, setConseillers] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
-    fetchAdmins();
+    fetchConseillers();
   }, []);
 
-  const fetchAdmins = async () => {
+  const fetchConseillers = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/users?role=Conseille%20Local');
-      setAdmins(response.data.data);
+      const response = await axios.get('http://127.0.0.1:5000/getlistconseille');
+      setConseillers(response.data);
     } catch (error) {
-      console.error('Erreur lors de la récupération des administrateurs:', error);
+      console.error('Erreur lors de la récupération des conseillers:', error);
     }
   };
 
   const handleDelete = async (id) => {
-    const isConfirmed = window.confirm('Êtes-vous sûr de vouloir supprimer cet administrateur ?');
+    const isConfirmed = window.confirm('Êtes-vous sûr de vouloir supprimer ce conseiller ?');
 
     if (!isConfirmed) {
       return;
@@ -29,15 +29,15 @@ const ConseillerList = () => {
 
     try {
       await axios.delete(`http://127.0.0.1:5000/users/${id}`);
-      setAdmins(admins.filter(admin => admin.id !== id));
-      console.log('Administrateur supprimé avec succès');
+      setConseillers(conseillers.filter(conseiller => conseiller.id !== id));
+      console.log('Conseiller supprimé avec succès');
     } catch (error) {
-      console.error('Erreur lors de la suppression de l\'administrateur:', error);
+      console.error('Erreur lors de la suppression du conseiller:', error);
     }
   };
 
-  const handleUpdate = (admin) => {
-    history.push(`/UpdateAdmin/${admin.id}`, { admin });
+  const handleUpdate = (conseiller) => {
+    history.push(`/UpdateConseiller/${conseiller.id}`, { conseiller });
   };
 
   const columns = [
@@ -45,7 +45,7 @@ const ConseillerList = () => {
       title: 'Image de profil',
       dataIndex: 'profile_image',
       key: 'profile_image',
-      render: (text, admin) => (
+      render: (text, conseiller) => (
         <Avatar src={`http://127.0.0.1:5000/static/uploads/${text}`} size={64} />
       ),
     },
@@ -69,16 +69,15 @@ const ConseillerList = () => {
       dataIndex: 'email',
       key: 'email',
     },
-   
     {
       title: 'Actions',
       key: 'actions',
-      render: (text, admin) => (
+      render: (text, conseiller) => (
         <span>
-          <Button type="primary" onClick={() => handleUpdate(admin)}>
+          <Button type="primary" onClick={() => handleUpdate(conseiller)}>
             Modifier
           </Button>
-          <Button type="danger" onClick={() => handleDelete(admin.id)}>
+          <Button type="danger" onClick={() => handleDelete(conseiller.id)}>
             Supprimer
           </Button>
         </span>
@@ -94,8 +93,8 @@ const ConseillerList = () => {
 
   return (
     <div>
-      <h2>Liste des Conseilleurs</h2>
-      <Table dataSource={admins} columns={columns} rowKey="id" pagination={paginationConfig} />
+      <h2>Liste des Conseillers</h2>
+      <Table dataSource={conseillers} columns={columns} rowKey="id" pagination={paginationConfig} />
     </div>
   );
 };
