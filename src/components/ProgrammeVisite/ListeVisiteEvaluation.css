@@ -1,78 +1,41 @@
-.titre-liste {
-    color: #64748B; /*Bleu-gris doux */
-    text-align: center;
-    margin-bottom: 20px;
+.container {
+    margin: 20px;
+  }
+  
+  .label {
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .input {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .textarea {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .select {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  
+  .button {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+
+  /* styles.css */
+.sharp-modal .ant-modal-content {
+  border-radius: 0 !important; /* Pour rendre les coins pointus */
+  border: 1px solid #d9d9d9; /* Facultatif: ajouter une bordure */
 }
-
-.card-programme {
-    transition: box-shadow .3s;
-    border-radius: 8px;
-    overflow: hidden;
-    background-color: #F0F4F8; /* Fond clair pour les cartes */
+.sharp-modal .ant-modal-header {
+  border-radius: 0 !important; /* Pour rendre les coins du header pointus */
 }
-
-.card-programme:hover {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Couleur orange pour l'en-tête des cartes */
-.ant-card-head {
-    background: linear-gradient(135deg, #212E53 0%, #212E53 100%);
-    color: white !important;
-}
-
-/* Styles pour les boutons avec la nouvelle couleur orange */
-.ant-btn-primary {
-    border-color: #212E53;
-    background-color: #212E53;
-}
-
-.ant-btn-primary:hover,
-.ant-btn-primary:focus {
-    background-color: #212E53; /* Orange clair pour le survol */
-    border-color: #212E53;
-}
-
-/* Vous pouvez également mettre à jour d'autres éléments qui utilisent la couleur bleue précédente */
-.titre-liste {
-    color: #212E53; /* Orange pour les titres */
-}
-
-/*Ajoutez d'autres styles personnalisés ici */
-
-/* Arrière-plan de la page */
-body {
-    background-color: #E2E8F0; /* Couleur de fond douce pour la page entière */
-    font-family: 'Open Sans', sans-serif; /* Police douce et moderne */
-}
-
-/* Ajoutez d'autres styles personnalisés ici */
-/* Ajout d'une animation de survol pour les cartes */
-.card-programme:hover {
-    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.2);
-    transform: translateY(-5px);
-}
-
-/* Utilisation d'un gradient de couleur pour l'en-tête des cartes */
-.ant-card-head {
-    background: linear-gradient(135deg, #94A3B8 0%, #CBD5E1 100%);
-    color: white !important;
-}
-
-/* Styles pour les boutons avec effet de survol */
-.ant-btn-primary:hover,
-.ant-btn-primary:focus {
-    background-color: #ADCBE3; /* Bleu clair pour le survol */
-    border-color: #ADCBE3;
-    transform: scale(1.05);
-}
-
-/* Responsive design pour les mobiles*/
-@media (max-width: 768px) {
-    .titre-liste {
-        font-size: 1.5rem; /* Taille de police plus grande pour les titres */
-    }
-    .card-programme {
-        margin-bottom: 1rem; /* Espacement plus grand entre les cartes */
-    }
+.sharp-modal .ant-modal-footer {
+  border-radius: 0 !important; /* Pour rendre les coins du footer pointus */
 }

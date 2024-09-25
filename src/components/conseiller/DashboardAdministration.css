@@ -1,0 +1,10 @@
+.dashboard-content {
+    margin: 16px;
+    background: #001529; /* Same as Sider background */
+    color: #fff;
+    min-height: 360px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0, 21, 41, 0.08);
+    padding: 20px;
+  }
+  

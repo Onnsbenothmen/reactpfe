@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { Layout, Button, Menu } from 'antd';
-import { DashboardOutlined, UserOutlined } from '@ant-design/icons';
+import { Layout, Menu, Button, Avatar } from 'antd';
 import { useHistory } from 'react-router-dom';
+import { UserOutlined, PlusOutlined, UnorderedListOutlined, LogoutOutlined,UsergroupDeleteOutlined , CommentOutlined, DashboardOutlined ,HddOutlined} from '@ant-design/icons';
+import { useAuth } from '../hooks/AuthContext';
+import './Dashboard.css'; // Importer le fichier CSS personnalisé
+
+// Chemins d'importation corrigés
 import InstanceList from './Instance/InstanceList';
 import UserList from './listes users/UserList';
 import ArchivedUsers from './listes users/ArchivedUsers';
@@ -13,153 +16,167 @@ import InactivePresidents from './listes users/listNonInscrit';
 const { Header, Sider, Content } = Layout;
 
 const Dashboard = () => {
-  const history = useHistory();
-  const [userRole, setUserRole] = useState(null);
-  const [selectedMenuItem, setSelectedMenuItem] = useState('1');
-  const [showInstanceList, setShowInstanceList] = useState(true);
-  const [showAddInstanceForm, setShowAddInstanceForm] = useState(false);
-  const [showRolesList, setShowRolesList] = useState(false);
-  const [showUserList, setShowUserList] = useState(false);
-  const [showSignUp, setShowSignUp] = useState(false);
-  const [showArchivedUsers, setShowArchivedUsers] = useState(false);
-  const [showInactivePresidents, setShowInactivePresidents] = useState(false);
-  const [subMenuOpen, setSubMenuOpen] = useState(false);
-  const menuRef = useRef();
+    const history = useHistory();
+    const [userRole, setUserRole] = useState(null);
+    const [showInstanceList, setShowInstanceList] = useState(true);
+    const [showAddInstanceForm, setShowAddInstanceForm] = useState(false);
+    const [showRolesList, setShowRolesList] = useState(false);
+    const [showUserList, setShowUserList] = useState(false);
+    const [showSignUp, setShowSignUp] = useState(false);
+    const [showArchivedUsers, setShowArchivedUsers] = useState(false);
+    const [showInactivePresidents, setShowInactivePresidents] = useState(false);
+    const { user } = useAuth();
+    const menuRef = useRef();
+    const [selectedMenuItem, setSelectedMenuItem] = useState('1');
+    const [subMenuOpen, setSubMenuOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      try {
-        const response = await axios.get('URL_VERS_VOTRE_ENDPOINT_POUR_OBTENIR_LE_ROLE');
-        setUserRole(response.data.role);
-      } catch (error) {
-        console.error('Erreur lors de la récupération du rôle de l\'utilisateur :', error);
-      }
+    useEffect(() => {
+        const storedSelectedMenuItem = localStorage.getItem('selectedMenuItem');
+        if (storedSelectedMenuItem) {
+            setSelectedMenuItem(storedSelectedMenuItem);
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem('selectedMenuItem');
+        history.push('/Login');
     };
 
-    fetchUserRole();
-  }, []);
+    const handleSubMenuOpenChange = (open) => {
+        setSubMenuOpen(open);
+    };
 
-  const handleLogin = () => {
-    history.push('/login');
-  };
+    const handleMenuItemClick = (e) => {
+        setSelectedMenuItem(e.key);
+        switch (e.key) {
+            case '1':
+                setShowInstanceList(true);
+                setShowAddInstanceForm(false);
+                setShowRolesList(false);
+                setShowUserList(false);
+                setShowSignUp(false);
+                setShowArchivedUsers(false);
+                setShowInactivePresidents(false);
+                break;
+            case '2':
+                setShowInstanceList(false);
+                setShowAddInstanceForm(true);
+                setShowRolesList(false);
+                setShowUserList(false);
+                setShowSignUp(false);
+                setShowArchivedUsers(false);
+                setShowInactivePresidents(false);
+                break;
+            case '3':
+                setShowInstanceList(false);
+                setShowAddInstanceForm(false);
+                setShowRolesList(true);
+                setShowUserList(false);
+                setShowSignUp(false);
+                setShowArchivedUsers(false);
+                setShowInactivePresidents(false);
+                break;
+            case '4.1':
+                setShowInstanceList(false);
+                setShowAddInstanceForm(false);
+                setShowRolesList(false);
+                setShowUserList(true);
+                setShowSignUp(false);
+                setShowArchivedUsers(false);
+                setShowInactivePresidents(false);
+                break;
+            case '4.2':
+                setShowInstanceList(false);
+                setShowAddInstanceForm(false);
+                setShowRolesList(false);
+                setShowUserList(false);
+                setShowSignUp(false);
+                setShowArchivedUsers(true);
+                setShowInactivePresidents(false);
+                break;
+            case '4.4':
+                setShowInstanceList(false);
+                setShowAddInstanceForm(false);
+                setShowRolesList(false);
+                setShowUserList(false);
+                setShowSignUp(false);
+                setShowArchivedUsers(false);
+                setShowInactivePresidents(true);
+                break;
+            default:
+                break;
+        }
+        // On ferme le sous-menu seulement si l'utilisateur ne se trouve pas dans la catégorie "Gestion des utilisateurs"
+        if (!e.key.startsWith('4')) {
+            setSubMenuOpen(false);
+        }
+    };
 
-  const handleSubMenuOpenChange = (open) => {
-    setSubMenuOpen(open);
-  };
+    // Définition de la fonction renderContent
+    const renderContent = () => {
+        if (showInstanceList) return <InstanceList />;
+        if (showAddInstanceForm) return <div>Add Instance Form</div>;
+        if (showRolesList) return <RolesList />;
+        if (showUserList) return <UserList />;
+        if (showSignUp) return <SignUp />;
+        if (showArchivedUsers) return <ArchivedUsers />;
+        if (showInactivePresidents) return <InactivePresidents />;
+        return null;
+    };
 
-  const handleMenuItemClick = (e) => {
-    setSelectedMenuItem(e.key);
-    switch (e.key) {
-      case '1':
-        setShowInstanceList(true);
-        setShowAddInstanceForm(false);
-        setShowRolesList(false);
-        setShowUserList(false);
-        setShowSignUp(false);
-        setShowArchivedUsers(false);
-        setShowInactivePresidents(false);
-        break;
-      case '2':
-        setShowInstanceList(false);
-        setShowAddInstanceForm(true);
-        setShowRolesList(false);
-        setShowUserList(false);
-        setShowSignUp(false);
-        setShowArchivedUsers(false);
-        setShowInactivePresidents(false);
-        break;
-      case '3':
-        setShowInstanceList(false);
-        setShowAddInstanceForm(false);
-        setShowRolesList(true);
-        setShowUserList(false);
-        setShowSignUp(false);
-        setShowArchivedUsers(false);
-        setShowInactivePresidents(false);
-        break;
-      case '4.1':
-        setShowInstanceList(false);
-        setShowAddInstanceForm(false);
-        setShowRolesList(false);
-        setShowUserList(true);
-        setShowSignUp(false);
-        setShowArchivedUsers(false);
-        setShowInactivePresidents(false);
-        break;
-      case '4.2':
-        setShowInstanceList(false);
-        setShowAddInstanceForm(false);
-        setShowRolesList(false);
-        setShowUserList(false);
-        setShowSignUp(false);
-        setShowArchivedUsers(true);
-        setShowInactivePresidents(false);
-        break;
+    return (
+        <Layout style={{ minHeight: '100vh' }}>
+            <Sider style={{ backgroundColor: '#006bbd' }}>
+                {/* Ajouter le logo ici */}
+                <img
+                    src={`${process.env.PUBLIC_URL}/images/conseil.png`}
+                    alt="Logo"
+                    style={{
+                        width: '45px',
+                        marginLeft: '18px',
+                        marginTop: '10px',
+                        marginBottom: '1px',
+                        borderRadius: '50%',
+                    }}
+                />
+                <div style={{ textAlign: 'center', margin: '16px 0', color: 'white' }}>
+                    <div>{user && `${user.firstName} ${user.lastName}`}<br />
+                        <span style={{ color: '#00356a' }}>{user && user.email}</span>
+                    </div>
+                    <br />
+                    <Avatar
+                        size={89}
+                        src={user && user.profile_image ? `http://127.0.0.1:5000/static/uploads/${user.profile_image}` : null}
+                        icon={!user || !user.profile_image ? <UserOutlined /> : null}
+                        style={{
+                            border: '4px solid white',
+                            borderRadius: '50%',
+                        }}
+                    />
+                </div>
 
-      case '4.4':
-        setShowInstanceList(false);
-        setShowAddInstanceForm(false);
-        setShowRolesList(false);
-        setShowUserList(false);
-        setShowSignUp(false);
-        setShowArchivedUsers(false);
-        setShowInactivePresidents(true);
-        break;
-      default:
-        break;
-    }
-    // On ferme le sous-menu seulement si l'utilisateur ne se trouve pas dans la catégorie "Gestion des utilisateurs"
-    if (!e.key.startsWith('4')) {
-      setSubMenuOpen(false);
-    }
-  };
+                <Menu className="custom-menu" mode="inline" defaultSelectedKeys={['1']} selectedKeys={[selectedMenuItem]} onClick={handleMenuItemClick}>
 
-  return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider width={200} theme="dark" style={{ background: '#001529', color: '#fff' }}>
-        <div style={{ textAlign: 'center', padding: '20px 0' }}>
-          <img src="/OIP.jpg" alt="Nom de l'application" style={{ width: '200px', height: '50px' }} />
-        </div>
-        {/* <Layout.Sider theme="dark" width={200} collapsible> */}
-          <Menu
-            ref={menuRef}
-            mode="inline"
-            theme="dark"
-            selectedKeys={[selectedMenuItem]}
-            onClick={handleMenuItemClick}
-            onOpenChange={handleSubMenuOpenChange}
-            openKeys={subMenuOpen ? ['sub1'] : []}
-            style={{ background: '#001529', color: '#fff' }}
-          >
-            <Menu.Item key="1" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Gestion des Instances</Menu.Item>
-            <Menu.SubMenu key="sub1" icon={<UserOutlined />} title="Gestion des utilisateurs">
-              <Menu.Item key="4.1" style={{ color: '#fff' }}>Utilisateur Activée</Menu.Item>
-              <Menu.Item key="4.2" style={{ color: '#fff' }}>Utilisateurs Désactivés</Menu.Item>
-              <Menu.Item key="4.4" style={{ color: '#fff' }}>Utilisateurs non inscrits</Menu.Item>
-
-            </Menu.SubMenu>
-
-            <Menu.Item key="3" icon={<DashboardOutlined />} style={{ color: '#fff' }}>Liste des Rôles</Menu.Item>
-          </Menu>
-        {/* </Layout.Sider> */}
-      </Sider>
-      <Layout>
-        <Header style={{ background: '#fff', padding: '0 16px', display: 'flex', alignItems: 'center', boxShadow: '0 1px 4px rgba(0, 21, 41, 0.08)' }}>
-          <div style={{ flex: '1' }}></div>
-          <Button type="primary" onClick={handleLogin}>Déconnexion</Button>
-        </Header>
-        <Content style={{ margin: '16px', background: '#fff', minHeight: '360px', borderRadius: '5px', boxShadow: '0 2px 8px rgba(0, 21, 41, 0.08)' }}>
-          {showInstanceList && <InstanceList />}
-          {showAddInstanceForm && <showAddInstanceForm />}
-          {showRolesList && <RolesList />}
-          {showUserList && <UserList filter="active" />}
-          {showArchivedUsers && <ArchivedUsers />}
-          {showSignUp && <SignUp />}
-          {showInactivePresidents && <InactivePresidents />}
-        </Content>
-      </Layout>
-    </Layout>
-  );
+                    <Menu.Item key="1" icon={<HddOutlined  />}>Gestion des Instances</Menu.Item>
+                    <Menu.SubMenu key="sub1" icon={<UsergroupDeleteOutlined />} title="Gestion des utilisateurs">
+                        <Menu.Item key="4.1" >Utilisateur Activé</Menu.Item>
+                        <Menu.Item key="4.2">Utilisateurs Désactivés</Menu.Item>
+                        <Menu.Item key="4.4">Utilisateurs non inscrits</Menu.Item>
+                    </Menu.SubMenu>
+                </Menu>
+                <div className="logout-button">
+                    <Button type="primary" onClick={handleLogout}>Déconnexion</Button>
+                </div>
+            </Sider>
+            <Layout>
+                <Content style={{ margin: '16px' }}>
+                    <div className="content-container">
+                        {renderContent()}
+                    </div>
+                </Content>
+            </Layout>
+        </Layout>
+    );
 };
 
 export default Dashboard;

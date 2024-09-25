@@ -1,0 +1,34 @@
+/* Styles pour bordures rugueuses */
+.custom-card {
+    border: 3px solid black; /* Bordure noire */
+    border-radius: 8px; /* Bords légèrement arrondis */
+    padding: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Légère ombre pour plus de profondeur */
+    background: white; /* Fond blanc */
+    position: relative; /* Nécessaire pour le positionnement des bordures rugueuses */
+  }
+  
+  .custom-card::before,
+  .custom-card::after {
+    content: '';
+    position: absolute;
+    border: 3px solid black; /* Bordure noire */
+    border-radius: 8px; /* Bords légèrement arrondis */
+  }
+  
+  .custom-card::before {
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)); /* Ombre rugueuse */
+  }
+  
+  .custom-card::after {
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5)); /* Ombre rugueuse */
+  }
+  

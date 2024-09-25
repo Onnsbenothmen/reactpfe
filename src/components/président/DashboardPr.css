@@ -1,0 +1,41 @@
+.custom-sider {
+    background-color: #006bbd;
+}
+
+.avatar-container {
+    text-align: center;
+    margin: 16px 0;
+    color: white;
+}
+
+.user-info {
+    margin-top: 10px;
+}
+
+.user-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.logout-button {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: white;
+}
+
+.content-container {
+    padding: 24px;
+    min-height: 360px;
+    background-color: #fff;
+}
+
+/* couleur de dashbord */
+.custom-menu {
+    background-color: #FFFFFF; /* Votre couleur rose personnalisée */
+}

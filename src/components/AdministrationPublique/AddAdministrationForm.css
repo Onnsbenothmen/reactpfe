@@ -1,0 +1,24 @@
+/* AddAdministrationForm.css */
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px;
+  }
+  
+  .admin-form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .submit-button {
+    width: 100%;
+    background-color: #006bbd;
+  }
+  

@@ -3,7 +3,6 @@ import { Form, Input, Button, Avatar, message } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { useParams } from 'react-router-dom'; // Importez useParams depuis react-router-dom
 
-
 const Signup = () => {
   const { newUserId } = useParams(); // Obtenez newUserId à partir des paramètres d'URL
   const [formStep, setFormStep] = useState(1);
@@ -13,6 +12,11 @@ const Signup = () => {
     email: '',
     address: '',
     phoneNumber: '',
+    birth_date: '',
+    cin: '',
+    postal_code: '',
+    situation_familiale: '',
+    ville: ''
   });
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -39,6 +43,14 @@ const Signup = () => {
     formDataToSend.append('email', formData.email);
     formDataToSend.append('address', formData.address);
     formDataToSend.append('phoneNumber', formData.phoneNumber);
+    formDataToSend.append('birth_date', formData.birth_date);
+    formDataToSend.append('cin', formData.cin);
+    formDataToSend.append('postal_code', formData.postal_code);
+    formDataToSend.append('situation_familiale', formData.situation_familiale);
+    formDataToSend.append('ville', formData.ville);
+    formDataToSend.append('linkedin', formData.linkedin);
+    formDataToSend.append('lienFacebook', formData.lienFacebook);
+    formDataToSend.append('description_profil', formData.description_profil);
     formDataToSend.append('password', password);
 
     try {
@@ -57,6 +69,14 @@ const Signup = () => {
         email: '',
         address: '',
         phoneNumber: '',
+        birth_date: '',
+        cin: '',
+        postal_code: '',
+        situation_familiale: '',
+        ville: '',
+        linkedin: '',
+        lienFacebook: '',
+        description_profil: ''
       });
       setPassword('');
       setFormStep(1);
@@ -92,6 +112,30 @@ const Signup = () => {
           onValuesChange={handleFormChange}
           initialValues={formData}
         >
+          <Form.Item>
+  <input
+    type="file"
+    onChange={handleFileChange}
+    accept="image/*"
+    style={{ display: 'none' }}
+    id="avatar"
+  />
+  <label htmlFor="avatar">
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      {previewImage ? (
+        <img
+          src={previewImage}
+          alt="Avatar"
+          style={{ width: '100px', height: '100px', borderRadius: '50%', cursor: 'pointer', marginBottom: '10px' }}
+        />
+      ) : (
+        <Avatar size={100} icon={<UserOutlined />} />
+      )}
+      <div style={{ textAlign: 'center', color: '#1877f2', cursor: 'pointer' }}>Ajouter une photo</div>
+    </div>
+  </label>
+</Form.Item>
+
           <Form.Item name="firstName" rules={[{ required: true, message: 'Veuillez entrer votre prénom !' }]}>
             <Input prefix={<UserOutlined />} placeholder="Prénom" />
           </Form.Item>
@@ -107,29 +151,31 @@ const Signup = () => {
           <Form.Item name="phoneNumber" rules={[{ required: true, message: 'Veuillez entrer votre numéro de téléphone !' }]}>
             <Input prefix={<UserOutlined />} placeholder="Numéro de téléphone" />
           </Form.Item>
-          <Form.Item>
-            <input
-              type="file"
-              onChange={handleFileChange}
-              accept="image/*"
-              style={{ display: 'none' }}
-              id="avatar"
-            />
-            <label htmlFor="avatar">
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                {previewImage ? (
-                  <img
-                    src={previewImage}
-                    alt="Avatar"
-                    style={{ width: '100px', height: '100px', borderRadius: '50%', cursor: 'pointer', marginBottom: '10px' }}
-                  />
-                ) : (
-                  <Avatar size={100} icon={<UserOutlined />} />
-                )}
-                <div style={{ textAlign: 'center', color: '#1877f2', cursor: 'pointer' }}>Ajouter une photo</div>
-              </div>
-            </label>
+          <Form.Item name="birth_date" rules={[{ required: true, message: 'Veuillez entrer votre date de naissance !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="Date de naissance" />
           </Form.Item>
+          <Form.Item name="cin" rules={[{ required: true, message: 'Veuillez entrer votre CIN !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="CIN" />
+          </Form.Item>
+          <Form.Item name="postal_code" rules={[{ required: true, message: 'Veuillez entrer votre code postal !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="Code postal" />
+          </Form.Item>
+          <Form.Item name="situation_familiale" rules={[{ required: true, message: 'Veuillez entrer votre état !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="État" />
+          </Form.Item>
+          <Form.Item name="ville" rules={[{ required: true, message: 'Veuillez entrer votre ville !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="Ville" />
+          </Form.Item>
+          <Form.Item name="linkedin" rules={[{ required: true, message: 'Veuillez entrer votre lien linkedin !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="linkedin" />
+          </Form.Item>
+          <Form.Item name="lienFacebook" rules={[{ required: true, message: 'Veuillez entrer votre lienFacebook !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="lienFacebook" />
+          </Form.Item>
+          <Form.Item name="description_profil" rules={[{ required: true, message: 'Veuillez entrer votre description_profil !' }]}>
+            <Input prefix={<UserOutlined />} placeholder="description_profil" />
+          </Form.Item>
+
           <Form.Item style={{ textAlign: 'center' }}>
             <Button type="primary" htmlType="submit" style={{ backgroundColor: '#1877f2', borderColor: '#1877f2' }}>
               Continuer

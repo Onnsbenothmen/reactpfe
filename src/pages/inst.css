@@ -1,0 +1,66 @@
+.pointed-modal .ant-modal-content {
+    border-radius: 0;
+}
+
+/* InstanceList.css */
+
+.instance-list-container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.instance-list-card {
+  width: 100%;
+  max-width: 800px; /* Ajustez la largeur max selon vos besoins */
+}
+
+.search-filter-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.search-input {
+  width: 450px; /* Réduisez la largeur pour la compacité */
+}
+
+.filter-select {
+  width: 350px; /* Ajustez selon vos besoins */
+  margin-left: 10px; /* Espace entre l'input de recherche et le select */
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px; /* Espace entre les cartes */
+  justify-content: center; /* Centre les cartes dans le conteneur */
+}
+
+.card {
+  width: 220px; /* Réduisez la largeur des cartes */
+  padding: 10px; /* Réduisez le padding */
+  border-radius: 4px; /* Ajout d'une bordure légèrement arrondie */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 1.1em; /* Taille de police plus petite */
+  font-weight: 500; /* Réduire le poids de la police si nécessaire */
+  margin-bottom: 8px;
+}
+
+.card-content {
+  font-size: 0.9em; /* Taille de police plus petite pour le contenu */
+  margin-bottom: 4px;
+}
+
+.card-button {
+  font-size: 0.9em; /* Taille de police plus petite pour le bouton */
+  padding: 4px; /* Réduire le padding pour rendre le bouton plus petit */
+  align-self: flex-start; /* Alignement du bouton à gauche */
+}

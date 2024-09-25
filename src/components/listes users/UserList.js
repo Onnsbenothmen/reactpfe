@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Typography, Avatar, Table, Modal, Form, Input, Button, message } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-
+import './UserList.css';
 const { Title } = Typography;
 
 const UserList = () => {
@@ -160,11 +160,16 @@ const UserList = () => {
       key: 'actions',
       render: (text, user) => (
         <span>
-          <Button type="primary" onClick={() => handleUpdate(user)}>
-            Modifier
-          </Button>
+          <Button 
+  type="primary" 
+  className="custom-button" 
+  onClick={() => handleUpdate(user)}
+>
+  Modifier
+  
+</Button>
       
-          <Button disabled={user.isButtonDisabled} style={{ backgroundColor: 'orange', color: 'black' }} onClick={() => handleDisable(user.id)}>Désactiver</Button>
+          <Button disabled={user.isButtonDisabled} style={{ backgroundColor: '#d7d8da', color: 'black' }} onClick={() => handleDisable(user.id)}>Activer</Button>
         </span>
       ),
     },
@@ -172,8 +177,14 @@ const UserList = () => {
 
   return (
     <div className="container py-4">
-      <Title level={2} className="text-center">Liste des Utilisateurs</Title>
-      <Table 
+<h2 className="titre-liste"  style={{ 
+  textAlign: 'center', 
+  color: '#2B6CC4', 
+  fontFamily: 'Arial, sans-serif', 
+  textShadow: '2px 2px 4px rgba(0,0,0,0.2)', 
+  margin: '20px 0', 
+  padding: '10px 0' 
+}}>Liste des utilisateurs</h2>      <Table 
         dataSource={users} 
         columns={columns} 
         rowKey="id" 

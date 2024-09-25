@@ -1,0 +1,44 @@
+/* DemandeDetail.css */
+
+.demande-detail-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.demande-title {
+  color: #006bbd; /* Couleur modifiée */
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.demande-divider {
+  margin-bottom: 20px;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.question, .response {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 70%;
+}
+
+.question {
+  align-self: flex-end;
+  background-color: #f5f5f5;
+}
+
+.response {
+  align-self: flex-start;
+  background-color: #d3d3d3;
+}
+
+.message-divider {
+  margin: 10px 0;
+}

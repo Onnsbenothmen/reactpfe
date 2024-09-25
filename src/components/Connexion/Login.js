@@ -30,6 +30,9 @@ const Login = () => {
         history.push('/superAdmin_dashboard');
       } else if(profile.role === 'conseiller') {
         history.push('/conseille');
+      } else if(profile.role === 'directeur') {
+        history.push('/dashboardAdministration');
+        
       } else {
         console.error('Role non géré:', profile.role);
       }
@@ -45,10 +48,18 @@ const Login = () => {
   };
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundImage: `url(${process.env.PUBLIC_URL}/images/aa.jpg)`,
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      }}>
       <div style={{ maxWidth: '400px', width: '100%' }}>
         <div style={{ backgroundColor: '#fff', padding: '30px', borderRadius: '10px', boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-          <Title level={2} style={{ textAlign: 'center', marginBottom: '20px' }}>Connexion</Title>
+          <Title level={2} style={{ textAlign: 'center', color:  '#006bbd', marginBottom: '20px' }}>Connexion</Title>
           <Form onFinish={onFinish} layout="vertical">
             <Form.Item label="Email" name="email" rules={[{ required: true, message: 'Veuillez saisir votre email' }]}>
               <Input type="email" />
@@ -57,9 +68,9 @@ const Login = () => {
               <Input.Password />
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" loading={loading} style={{ width: '100%', height: '50px', fontSize: '18px' }}>Se connecter</Button>
+              <Button type="primary" htmlType="submit" loading={loading} style={{ width: '100%', height: '50px', background:  '#006bbd', fontSize: '18px' }}>Se connecter</Button>
             </Form.Item>
-            <Form.Item style={{ textAlign: 'center' }}>
+            <Form.Item style={{ textAlign: 'center', color: '#006bbd' }}>
               <Link to="/forgot_password">Mot de passe oublié ?</Link>
             </Form.Item>
           </Form>

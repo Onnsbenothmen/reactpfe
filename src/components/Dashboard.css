@@ -1,14 +1,53 @@
-
-.about-me-options {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #d9d9d9;
-    padding: 8px;
-    display: none;
+.custom-sider {
+    background-color: #006bbd;
 }
 
-.about-me-item:hover .about-me-options {
-    display: block;
+.avatar-container {
+    text-align: center;
+    margin: 16px 0;
+    color: white;
+}
+
+.user-info {
+    margin-top: 10px;
+}
+
+.user-info h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.user-info p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.logout-button {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: white;
+}
+
+.content-container {
+    padding: 24px;
+    min-height: 360px;
+    background-color: #fff;
+}
+
+/* couleur de dashbord */
+.custom-menu {
+    background-color: #FFFFFF; /* Votre couleur rose personnalisée */
+}
+
+/* Dashboard.css */
+.custom-menu .ant-menu-item-selected {
+    background-color: #006bbd !important;
+    color: white !important; /* Optionnel : pour changer la couleur du texte */
+}
+
+/* Pour le sous-menu, si vous souhaitez le styliser différemment */
+.custom-menu .ant-menu-item-selected.sub-menu-item {
+    background-color: #006bbd !important;
+    color: white !important;
 }

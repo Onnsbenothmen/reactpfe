@@ -1,0 +1,34 @@
+.status-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.status-realisee {
+  color: #1aa228;  /* Couleur du texte */
+  background-color: #e5e7e6;  /* Couleur du fond */
+  border: 1px solid #1aa228;  /* Bordure */
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-realisee .anticon {
+  margin-right: 5px;  /* Espace entre l'icône et le texte */
+}
+
+.status-annulee {
+  color: #a94442;  /* Couleur du texte */
+  background-color: #f2dede;  /* Couleur du fond */
+  border: 1px solid #a94442;  /* Bordure */
+}
+.eye-icon {
+  color: #1aa228;
+  font-size: 20px;
+}
+
+.title-center {
+  text-align: center;
+  color: #006bbd;
+}

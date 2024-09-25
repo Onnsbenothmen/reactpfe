@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import React, { useState, useEffect,useHistory } from 'react';
+import { useParams } from 'react-router-dom';
 import './UpdateConseilleur.css';
 import { Form, Input, Button, Avatar, Modal } from 'antd';
 import { UserOutlined, UploadOutlined } from '@ant-design/icons';

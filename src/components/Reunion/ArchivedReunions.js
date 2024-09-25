@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, message } from 'antd';
+import { Table, Tag, message } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
-
-
+import './ArchivedReunions.css'; // Assurez-vous d'avoir ce fichier CSS
 
 const ArchivedReunions = () => {
   const [archivedReunions, setArchivedReunions] = useState([]);
@@ -14,10 +13,8 @@ const ArchivedReunions = () => {
 
   const fetchArchivedReunions = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/reunions');
-      const allReunions = response.data;
-      const archivedReunions = allReunions.filter(reunion => reunion.statut === 'réalisée');
-      setArchivedReunions(archivedReunions);
+      const response = await axios.get('http://localhost:5000/reunions/archive');
+      setArchivedReunions(response.data);
     } catch (error) {
       console.error('Erreur lors du chargement des réunions archivées :', error);
       message.error('Erreur lors du chargement des réunions archivées');
@@ -51,15 +48,38 @@ const ArchivedReunions = () => {
       key: 'ordre_du_jour',
     },
     {
+      title: 'Statut',
+      dataIndex: 'statut',
+      key: 'statut',
+      render: (statut) => (
+        <Tag
+          className={`status-tag ${statut === 'réalisée' ? 'status-realisee' : 'status-annulee'}`}
+        >
+          {statut}
+        </Tag>
+      ),
+    },
+    {
       title: 'PV',
       key: 'pv',
       render: (text, record) => (
         record.pv_path ? (
+          <span>disponible</span>
+        ) : (
+          <span>non disponible</span>
+        )
+      ),
+    },
+    {
+      title: 'Voir',
+      key: 'voir',
+      render: (text, record) => (
+        record.pv_path ? (
           <a href={`http://localhost:5000/${record.pv_path}`} target="_blank" rel="noopener noreferrer">
-            <EyeOutlined />
+            <EyeOutlined style={{ fontSize: '20px', color: '#006bbd' }} />
           </a>
         ) : (
-          <span>PV non disponible</span>
+          <span>-</span>
         )
       ),
     },
@@ -67,7 +87,8 @@ const ArchivedReunions = () => {
 
   return (
     <div>
-      <h2>Liste des Réunions Archivées</h2>
+      <h2 style={{ textAlign: 'center', color: '#006bbd' }}>Liste des Réunions</h2>
+      <br /> {/* Ajoutez un retour à la ligne ici */}
       <Table columns={columns} dataSource={archivedReunions} rowKey="id" />
     </div>
   );

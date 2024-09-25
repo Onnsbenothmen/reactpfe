@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Button, Select, Upload, message, Checkbox, Modal } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
-import './ListeReunions.css'; // Assurez-vous d'importer le fichier CSS
-import { DeleteOutlined } from '@ant-design/icons';
-import { EyeOutlined } from '@ant-design/icons';
-import { UserOutlined } from '@ant-design/icons'; // ou une autre icône de silhouette
-import { DownloadOutlined } from '@ant-design/icons';
-
-
+import { Table, Button, Select, Upload, message, Modal } from 'antd';
+import { UploadOutlined, EyeOutlined, CloseOutlined } from '@ant-design/icons';
+import './ListeReunions.css';
+import AbsenceIcon from '../../assets/absence.png';
+import UploadIcon from '../../assets/submit.png';
+import ArchivedReunions from './ArchivedReunions';
+import AjoutReunion from './AjoutReunion'
 
 const { Option } = Select;
 
@@ -19,6 +16,10 @@ const ListeReunions = () => {
   const [selectedReunion, setSelectedReunion] = useState(null);
   const [participants, setParticipants] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [showArchivedModal, setShowArchivedModal] = useState(false);
+  const [showAjoutReunion, setshowAjoutReunion] = useState(false);
+  const [textSize, setTextSize] = useState('24px'); // Taille de texte du titre (modifiable)
+
 
   useEffect(() => {
     fetchReunions();
@@ -27,13 +28,24 @@ const ListeReunions = () => {
   const fetchReunions = async () => {
     try {
       const response = await axios.get('http://localhost:5000/reunions');
-      const allReunions = response.data;
-      const currentReunions = allReunions.filter(reunion => reunion.statut !== 'réalisée');
-      setReunions(currentReunions);
+      setReunions(response.data);
     } catch (error) {
       console.error('Erreur lors du chargement des réunions :', error);
     }
   };
+
+
+  const getStatutOptions = (statut) => {
+    if (statut === 'Prévue') {
+      return ['en cours', 'annulée'];
+    } else if (statut === 'en cours') {
+      return ['réalisée'];
+    } else {
+      // Retourne une option par défaut si le statut n'est pas "Prévue" ou "en cours"
+      return [statut];
+    }
+  };
+  
 
   const handleUpload = (reunionId, file) => {
     const formData = new FormData();
@@ -54,29 +66,6 @@ const ListeReunions = () => {
       });
   };
 
-  const handleDeletePV = async (reunionId) => {
-    try {
-      await axios.delete(`http://localhost:5000/reunions/${reunionId}/delete_pv`);
-      message.success('PV deleted successfully');
-      fetchReunions();
-    } catch (error) {
-      console.error('Erreur lors de la suppression du PV :', error);
-      message.error('Error deleting PV');
-    }
-  };
-  
-
-  const handleStatusChange = async (reunionId, statut) => {
-    try {
-      await axios.put(`http://localhost:5000/reunions/${reunionId}`, { statut });
-      fetchReunions();
-      message.success('Statut mis à jour avec succès');
-    } catch (error) {
-      console.error('Erreur lors de la mise à jour du statut :', error);
-      message.error('Erreur lors de la mise à jour du statut');
-    }
-  };
-
   const handlePresenceChange = async (reunionId, userId, presence) => {
     try {
       await axios.put(`http://localhost:5000/reunions/${reunionId}/participants/${userId}/presence`, { presence });
@@ -93,6 +82,26 @@ const ListeReunions = () => {
       message.error('Erreur lors de la mise à jour de la présence');
     }
   };
+
+
+  const handleStatusChange = async (reunionId, statut) => {
+    try {
+      await axios.put(`http://localhost:5000/reunions/${reunionId}`, { statut });
+      // Mettre à jour les réunions après la mise à jour du statut
+      fetchReunions();
+      message.success('Statut mis à jour avec succès');
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour du statut :', error);
+      message.error('Erreur lors de la mise à jour du statut');
+    }
+  };
+
+  
+  
+
+
+
+  
 
   const handleOpenModal = async (reunion) => {
     try {
@@ -133,31 +142,23 @@ const ListeReunions = () => {
       dataIndex: 'lieu',
       key: 'lieu',
     },
-    {
-      title: 'Ordre du jour',
-      dataIndex: 'ordre_du_jour',
-      key: 'ordre_du_jour',
-    },
+    
     {
       title: 'Statut',
       dataIndex: 'statut',
       key: 'statut',
-      render: (text, record) => (
-        <Select defaultValue={text} onChange={value => handleStatusChange(record.id, value)}>
-          <Option value="prévue">Prévue</Option>
-          <Option value="annulée">Annulée</Option>
-          <Option value="réalisée">Réalisée</Option>
-          <Option value="en cours">En cours</Option>
-        </Select>
+      render: (text) => (
+        <span>{text}</span>
       ),
     },
+    
     {
       title: 'Absence',
       key: 'participants',
       render: (text, record) => (
-        <Button onClick={() => handleOpenModal(record)}>
-  <UserOutlined style={{ color: 'red' }} /> {/* Vous pouvez ajuster la couleur et le style selon vos préférences */}
-</Button>
+        <Button onClick={() => handleOpenModal(record)} style={{ background: 'transparent', border: 'none' }}>
+          <img src={AbsenceIcon} alt="Absence" style={{ width: '30px', height: '30px' }} />
+        </Button>
       ),
     },
     {
@@ -165,28 +166,23 @@ const ListeReunions = () => {
       key: 'pv',
       render: (text, record) => (
         record.pv_path ? (
-          <div>
-            <a href={`http://localhost:5000/${record.pv_path}`} target="_blank" rel="noopener noreferrer">
-  <EyeOutlined />
-</a>
-
-            <Button
-              type="danger"
-              onClick={() => handleDeletePV(record.id)}
-              style={{ marginLeft: 10 }}
-              icon={<DeleteOutlined />}
-            />
-          </div>
+          <span>PV disponible</span>
         ) : (
-          <Upload
-  beforeUpload={(file) => {
-    handleUpload(record.id, file);
-    return false;
-  }}
-  showUploadList={false}
->
-  <Button icon={<DownloadOutlined />} loading={uploading}></Button>
-</Upload>
+          <span>Non disponible</span>
+        )
+      ),
+    },
+    
+    {
+      title: 'Voir',
+      key: 'voir',
+      render: (text, record) => (
+        record.pv_path ? (
+          <a href={`http://localhost:5000/${record.pv_path}`} target="_blank" rel="noopener noreferrer">
+            <EyeOutlined style={{ fontSize: '20px', color: '#006bbd' }} />
+          </a>
+        ) : (
+          <span>-</span>
         )
       ),
     }
@@ -204,18 +200,14 @@ const ListeReunions = () => {
       key: 'lastName',
     },
     {
-      title: 'Absent',
+      title: 'Présence',
       key: 'presence',
       render: (text, record) => (
-        <Checkbox
-          checked={!record.presence}
-          onChange={e => handlePresenceChange(selectedReunion.id, record.user.id, !e.target.checked)}
-        >
-          Absent
-        </Checkbox>
+        <span>{record.presence ? 'Présent' : 'Absent'}</span>
       ),
     },
   ];
+  
 
   const rowClassName = (record) => {
     return !record.presence ? 'absent-row' : '';
@@ -223,24 +215,70 @@ const ListeReunions = () => {
 
   return (
     <div>
-      <h2>Liste des Réunions Actuelles</h2>
+<h2 className="titre-liste"  style={{ 
+  textAlign: 'center', 
+  color: '#2B6CC4', 
+  fontFamily: 'Arial, sans-serif', 
+  textShadow: '2px 2px 4px rgba(0,0,0,0.2)', 
+  margin: '20px 0', 
+  padding: '10px 0' 
+}}> Réunions
+</h2>
+<Button
+        type="primary"
+        style={{ marginLeft: 900, background: '#006bbd', borderColor: '#006bbd' }}
+        onClick={() => setShowArchivedModal(true)}
+      >
+        Voir les réunions archivées
+      </Button>
+
+      <Button
+        type="primary"
+        style={{ marginTop: 20, background: '#006bbd', borderColor: '#006bbd' }}
+        onClick={() => setshowAjoutReunion(true)}
+      >
+        Ajouter réunion
+      </Button>
+      <br></br><br></br><br></br>
+
       <Table columns={columns} dataSource={reunions} rowKey="id" />
-      <Link to="/ArchivedReunions">
-        <Button type="primary" style={{ marginTop: 20 }}>Voir les réunions archivées</Button>
-      </Link>
+
       <Modal
-        title={`Participants à la réunion du ${selectedReunion && selectedReunion.date}`}
+        title={<div style={{ fontSize: '24px', textAlign: 'center', color:'#006bbd' }}>Liste absence<br /></div>}
         visible={modalVisible}
         onCancel={handleCloseModal}
         footer={null}
+        wrapClassName="custom-modal"
+        style={{ borderRadius: '10px', width: '80%' }}
       >
         <Table
           columns={participantColumns}
           dataSource={participants}
-          rowKey={record => record.user.id}
-          rowClassName={rowClassName}
+          rowKey={(record) => record.user.id}
           pagination={false}
         />
+      </Modal>
+
+      
+      <Modal
+        visible={showArchivedModal}
+        onCancel={() => setShowArchivedModal(false)}
+        footer={null}
+        wrapClassName="custom-modal"
+        style={{ minWidth: '900px' }}
+      >
+        <ArchivedReunions />
+      </Modal>
+
+      <Modal
+        title=""
+        visible={showAjoutReunion}
+        onCancel={() => setshowAjoutReunion(false)}
+        footer={null}
+        wrapClassName="custom-modal"
+        style={{ minWidth: '900px' }}
+      >
+        <AjoutReunion />
       </Modal>
     </div>
   );

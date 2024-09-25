@@ -50,7 +50,14 @@ const ArchivedProgrammesVisite = () => {
 
     return (
         <>
-            <h2 className="titre-liste">Liste des Programmes de Visite Archivés</h2>
+<h2 className="titre-liste"  style={{ 
+  textAlign: 'center', 
+  color: '#2B6CC4', 
+  fontFamily: 'Arial, sans-serif', 
+  textShadow: '2px 2px 4px rgba(0,0,0,0.2)', 
+  margin: '20px 0', 
+  padding: '10px 0' 
+}}>Programmes Visite Archivés</h2>            <br></br><br></br>
             <Table dataSource={archivedProgrammesVisite} columns={columns} />
         </>
     );

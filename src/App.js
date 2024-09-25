@@ -8,7 +8,7 @@ import InstanceList from './components/Instance/InstanceList';
 import RolesList from './components/Role/roleList';
 import DashboardPr from './components/président/president_dashboard';
 import 'antd/dist/reset.css';
-import AdminPubliqueList from './components/listAdmin';
+import AdminPubliqueList from './components/AdministrationPublique/listAdmin';
 import UpdateAdmin from './components/UpdateAdmin';
 import ConseillerList from './components/président/ConseillerList';
 import UpdateConseilleur from './UpdateConseilleur';
@@ -17,7 +17,6 @@ import UserProfile from './components/Profil/Propos';
 import Propos from './components/Profil/Propos';
 import UpdateProfile from './components/Profil/UpdateProfil';
 import ConseilleDashboard from './components/conseiller/conseille_dashboard';
-
 import ForgotPassword from './components/Profil/ForgotPassword';
 import ResetPassword from './components/Connexion/ResetPassword'
 import { ToastContainer } from 'react-toastify';
@@ -37,14 +36,34 @@ import ArchivedProgrammesVisite from './components/ProgrammeVisite/ArchivedProgr
 import AjoutReunion from './components/Reunion/AjoutReunion';
 import ListeReunions from './components/Reunion/ListeReunions';
 import ArchivedReunions from './components/Reunion/ArchivedReunions';
-const App = () => {
 
+import AppRouter from './AppRouter'; // Assure-toi que le chemin est correct
+import Navbar from './components/Navbar';
+import HeroSection from './components/HeroSection';
+
+
+
+import demandeAcces from './components/demandeAccesConseiller/demandeAcces';
+import DashboardAdministration from './components/conseiller/Administration_dashborard';
+import DemandeArchivee from './components/demandeAccesConseiller/DemandeArchivee';
+import DemandeItem from './components/demandeAccesConseiller/DemandeItem';
+import PlainteListe from './components/Plainte/PlainteListe';
+import PlainteArchiveeListe from './components/Plainte/PlainteArchiveeListe';
+
+import OrgChartComponent from './components/Instance/OrgChartComponent';
+import Statistique from './components/demandeAccesConseiller/Statistique';
+import ajouterAdministration from './components/AdministrationPublique/ajouterAdministration';
+import SignupDirector from './components/AdministrationPublique/signupAdministration';
+
+import ProgrammeVisiteConseiller from './components/conseiller/ProgrammeVisiteConseiller';
+
+const App = () => {
   return (
     <AuthProvider>
       <Router>
         <Switch>
           <Route exact path="/">
-            <Redirect to="/login" />
+            <Redirect to="/home" />
           </Route>
           <Route path="/login" component={Login} />
           <Route path="/signup/:newUserId">
@@ -60,6 +79,7 @@ const App = () => {
           <Route path="/UpdateAdmin/:id" component={UpdateAdmin} />
 
           <Route path="/ConseillerList" component={ConseillerList} />
+          
           <Route path="/conseilleur/:id" component={UpdateConseilleur} />
           <Route path="/UserProfile" component={UserProfile} />
           <Route path="/Propos" component={Propos} />
@@ -77,18 +97,58 @@ const App = () => {
           <Route path="/ListeVisiteEvaluation" component={ListeVisiteEvaluation} />
           <Route path="/ArchivedProgrammesVisite" component={ArchivedProgrammesVisite} />
 
-
-
           <Route path="/AjoutReunion" component={AjoutReunion} />
           <Route path="/ListeReunions" component={ListeReunions} />
-
-
           <Route path="/ArchivedReunions" component={ArchivedReunions} />
 
 
+
+          <Route path="/demandeAcces" component={demandeAcces} />
+          <Route path="/archivees" component={DemandeArchivee} />
+          <Route path="/DemandeItem" component={DemandeItem} />
+
+          
+          
+          <Route path="/dashboardAdministration" component={DashboardAdministration} />
+          <Route path="/PlainteListe" component={PlainteListe} />
+          <Route path="/PlainteArchiveeListe" component={PlainteArchiveeListe} />
+          <Route path="/OrgChartComponent" component={OrgChartComponent} />
+
+          <Route path="/Statistique" component={Statistique} />
+
+          <Route path="/ajouterAdministration" component={ajouterAdministration}/>
+          <Route path="/ListAdmin" component={AdminPubliqueList} />
+          <Route path="/registerAdmin/:newUserId" component={SignupDirector} />
+
+
+          <Route path="/ProgrammeVisiteConseiller" component={ProgrammeVisiteConseiller} />
+
+
+
+
+
+
+
+
+
+
+          
+
+
+
+          
+
+          <Route exact path="/home" render={() => (
+            
+            <>
+              <Navbar />
+              <HeroSection />
+              </>
+          )} />
+
+          <AppRouter /> {/* Intégration du composant AppRouter */}
+          
           <ToastContainer />
-
-
         </Switch>
       </Router>
     </AuthProvider>

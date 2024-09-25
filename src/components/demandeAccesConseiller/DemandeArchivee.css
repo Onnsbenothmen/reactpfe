@@ -1,0 +1,29 @@
+.demandes-archivees-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .demandes-archivees-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .demande-card {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .demande-card div {
+    padding: 16px;
+  }
+  
+  .demande-card:hover {
+    border-color: #1890ff;
+  }
+  
+  .ant-typography {
+    margin-bottom: 8px;
+  }
+  

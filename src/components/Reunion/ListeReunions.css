@@ -1,39 +1,74 @@
 .container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .title {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .reunion-item {
-    border: 1px solid #f0f0f0;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 15px;
-    background-color: #fff;
-  }
-  
-  .reunion-item h3 {
-    margin-top: 0;
-  }
-  
-  .reunion-item p {
-    margin: 5px 0;
-  }
-  
-  .reunion-item ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .reunion-item ul li {
-    margin: 2px 0;
-  }
-  
-  .absent-row {
-    background-color: #f0f0f0; /* Gris clair */
-  }
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.reunion-item {
+  border: 1px solid #f0f0f0;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background-color: #fff;
+}
+
+.reunion-item h3 {
+  margin-top: 0;
+}
+
+.reunion-item p {
+  margin: 5px 0;
+}
+
+.reunion-item ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.reunion-item ul li {
+  margin: 2px 0;
+}
+
+.absent-row {
+  background-color: #f0f0f0; /* Gris clair */
+}
+
+/* ListeReunions.css */
+
+.custom-modal .ant-modal-content {
+  border-radius: 10px; /* Coins arrondis */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* Ombre pour l'effet de profondeur */
+}
+
+.custom-modal .ant-modal-header {
+  border-radius: 10px 10px 0 0; /* Coins arrondis pour le header */
+  background-color: #f0f2f5; /* Couleur de fond personnalisée */
+}
+
+.custom-modal .ant-modal-body {
+  padding: 20px; /* Ajustez le padding si nécessaire */
+}
+
+.custom-modal .ant-modal-footer {
+  border-radius: 0 0 10px 10px; /* Coins arrondis pour le footer */
+}
+
+.custom-modal .ant-modal-title {
+  font-size: 10px; /* Taille de police plus petite */
+}
+/* ListeReunions.css */
+.page-title {
+  text-align: center;
+  color: #006bbd;
+}
+/* ListeReunions.css */
+.page-title {
+  text-align: center;
+  color: #006bbd;
+  margin-bottom: 20px; /* Ajustez cette valeur selon vos besoins */
+}

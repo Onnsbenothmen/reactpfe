@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Button, Radio, Select } from 'antd';
+import { Form, Input, Button, Radio, Select ,Row, Col } from 'antd';
 import axios from 'axios';
 import './AjoutReunion.css';
+import Swal from 'sweetalert2';
+
 
 const { Option } = Select;
 
@@ -25,14 +27,24 @@ const AjoutReunion = () => {
     axios.post('http://localhost:5000/reunions', values)
       .then(response => {
         console.log(response.data);
-        setMessage('Réunion ajoutée avec succès');
-        form.resetFields();
+        Swal.fire({
+          title: 'Succès',
+          text: 'Réunion ajoutée avec succès',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+                form.resetFields();
         setTypeReunion('');
       })
       .catch(error => {
         console.error('Erreur lors de l\'ajout de la réunion :', error);
-        setMessage('Erreur lors de l\'ajout de la réunion');
-      });
+        Swal.fire({
+          title: 'Erreur',
+          text: 'Erreur lors de l\'ajout de la réunion',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+              });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -40,14 +52,21 @@ const AjoutReunion = () => {
   };
 
   return (
-    <div className="container">
-      <h2 className="title">Ajouter une réunion</h2>
-      {message && <p className="message">{message}</p>}
+    <div > {/* Centrage du formulaire */}
+<h2 className="titre-liste"  style={{ 
+  textAlign: 'center', 
+  color: '#2B6CC4', 
+  fontFamily: 'Arial, sans-serif', 
+  textShadow: '2px 2px 4px rgba(0,0,0,0.2)', 
+  margin: '20px 0', 
+  padding: '10px 0' 
+}}>Ajouter une réunion</h2>      {message && <p style={{ textAlign: 'center', color: 'red' }}>{message}</p>}
       <Form
         form={form}
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        style={{ padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '8px' }} // Conteneur du formulaire
       >
         <Form.Item
           label="Type de réunion"
@@ -60,7 +79,8 @@ const AjoutReunion = () => {
           </Radio.Group>
         </Form.Item>
         {typeReunion && (
-          <>
+          <Row gutter={16}>
+            <Col span={12}>
             <Form.Item
               label="Date"
               name="date"
@@ -93,6 +113,10 @@ const AjoutReunion = () => {
                 <Input />
               </Form.Item>
             )}
+            </Col>
+            <Col span={12}>
+                        
+
             <Form.Item
               label="Ordre du jour"
               name="ordre_du_jour"
@@ -112,9 +136,22 @@ const AjoutReunion = () => {
               </Select>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">Ajouter la réunion</Button>
+            <Row justify="center"> {/* Centrage du bouton */}
+            <Col>
+
+            <Button
+  type="primary"
+  htmlType="submit"
+  style={{ backgroundColor: "#006bbd", borderColor: "#006bbd" }}
+>
+  Ajouter la réunion
+</Button>
+              </Col>
+                </Row>
             </Form.Item>
-          </>
+            </Col>
+          </Row>
+        
         )}
       </Form>
     </div>

@@ -1,43 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button, Table, Avatar } from 'antd';
+import { Table, message, Modal, Button, Avatar, Typography } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import AddCounselorsForm from './add_conseillers';
 
-const ConseillerList = () => {
-  const [conseillers, setConseillers] = useState([]);
-  const history = useHistory();
+const ConseillerList = ({ user }) => {
+  const [instanceName, setInstanceName] = useState('');
+  const [counselors, setCounselors] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    fetchConseillers();
-  }, []);
+    fetchInstanceName();
+    fetchCounselors();
+  }, [user]);
 
-  const fetchConseillers = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:5000/getlistconseille');
-      setConseillers(response.data);
-    } catch (error) {
-      console.error('Erreur lors de la récupération des conseillers:', error);
-    }
+  const fetchInstanceName = () => {
+    axios.get(`http://localhost:5000/user/${user.id}/inst`)
+      .then(response => {
+        const nomInstance = response.data.nom_instance;
+        if (nomInstance) {
+          setInstanceName(nomInstance);
+        } else {
+          message.error("Le nom de l'instance n'a pas pu être récupéré.");
+        }
+      })
+      .catch(error => {
+        message.error("Erreur lors de la récupération du nom de l'instance.");
+      });
   };
 
-  const handleDelete = async (id) => {
-    const isConfirmed = window.confirm('Êtes-vous sûr de vouloir supprimer ce conseiller ?');
-
-    if (!isConfirmed) {
-      return;
-    }
-
-    try {
-      await axios.delete(`http://127.0.0.1:5000/users/${id}`);
-      setConseillers(conseillers.filter(conseiller => conseiller.id !== id));
-      console.log('Conseiller supprimé avec succès');
-    } catch (error) {
-      console.error('Erreur lors de la suppression du conseiller:', error);
-    }
+  const fetchCounselors = () => {
+    axios.get('http://localhost:5000/getlistConseillers', { withCredentials: true })
+      .then(response => {
+        const dataWithKeys = response.data.map((item, index) => ({ ...item, key: index }));
+        setCounselors(dataWithKeys);
+        console.log("Liste des conseillers récupérée avec clés :", dataWithKeys);
+      })
+      .catch(error => {
+        message.error("Erreur lors de la récupération des conseillers.");
+      });
   };
 
-  const handleUpdate = (conseiller) => {
-    history.push(`/UpdateConseiller/${conseiller.id}`, { conseiller });
+  const showEditModal = (counselor) => {
+    setIsModalVisible(true);
+    // Pré-remplir le formulaire avec les données du conseiller si nécessaire
   };
 
   const columns = [
@@ -45,22 +51,17 @@ const ConseillerList = () => {
       title: 'Image de profil',
       dataIndex: 'profile_image',
       key: 'profile_image',
-      render: (text, conseiller) => (
+      render: (text) => (
         <Avatar src={`http://127.0.0.1:5000/static/uploads/${text}`} size={64} />
       ),
     },
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-    },
-    {
-      title: 'Prénom',
+      title: 'Nom',
       dataIndex: 'firstName',
       key: 'firstName',
     },
     {
-      title: 'Nom',
+      title: 'Prénom',
       dataIndex: 'lastName',
       key: 'lastName',
     },
@@ -70,31 +71,50 @@ const ConseillerList = () => {
       key: 'email',
     },
     {
+      title: 'ID de l\'instance',
+      dataIndex: 'instance_id',
+      key: 'instance_id',
+    },
+    {
       title: 'Actions',
-      key: 'actions',
-      render: (text, conseiller) => (
-        <span>
-          <Button type="primary" onClick={() => handleUpdate(conseiller)}>
-            Modifier
-          </Button>
-          <Button type="danger" onClick={() => handleDelete(conseiller.id)}>
-            Supprimer
-          </Button>
-        </span>
+      key: 'action',
+      render: (text, record) => (
+        <Button type="primary" onClick={() => showEditModal(record)}>Modifier</Button>
       ),
     },
   ];
 
-  const paginationConfig = {
-    pageSize: 10,
-    showSizeChanger: true,
-    pageSizeOptions: ['10', '20', '30'],
-  };
-
   return (
     <div>
-      <h2>Liste des Conseillers</h2>
-      <Table dataSource={conseillers} columns={columns} rowKey="id" pagination={paginationConfig} />
+      <Typography.Title level={1} style={{ 
+        textAlign: 'center', 
+        color: '#4A90E2', 
+        fontFamily: 'Arial, sans-serif', 
+        textShadow: '2px 2px 4px rgba(0,0,0,0.2)', 
+        margin: '20px 0', 
+        padding: '10px 0' 
+      }}>Liste des Conseillers</Typography.Title>
+  
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '20px' }}>
+        <Button type="primary" icon={<PlusOutlined />} onClick={() => setIsModalVisible(true)} style={{ background: 'green' }}>Ajouter</Button>
+      </div>
+      
+      <Table 
+        columns={columns} 
+        dataSource={counselors.filter(counselor => counselor.instance_id === instanceName)} 
+        style={{ backgroundColor: '#FFFFFF', borderRadius: '5px' }} 
+      />
+  
+      <Modal
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+        width={1000}
+        bodyStyle={{ maxHeight: '70vh', overflow: 'auto' }}
+        className="pointed-modal"
+      >
+        <AddCounselorsForm user={user} />
+      </Modal>
     </div>
   );
 };

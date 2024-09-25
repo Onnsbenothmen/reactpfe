@@ -1,0 +1,129 @@
+/* OrgChartComponent.css */
+
+/* RESET STYLES & HELPER CLASSES */
+:root {
+  --level-1: #8dccad;
+  --level-2: #f5cc7f;
+  --level-3: #ffd7ba;
+  --black: black;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+ol {
+  list-style: none;
+  padding: 0;
+}
+
+body {
+  text-align: center;
+  font-family: "Inter", sans-serif;
+}
+
+.org-chart {
+  max-width: 1000px;
+  padding: 20px;
+  margin: 0 auto;
+}
+
+/* RECTANGLE BASE STYLE */
+.rectangle {
+  position: relative;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 60px; /* Space between nodes vertically */
+}
+
+/* Add spacing between nodes horizontally */
+.level-2-wrapper li,
+.level-3-wrapper li {
+  margin-right: 40px; /* Space between nodes horizontally */
+}
+
+.level-2-wrapper li:last-child,
+.level-3-wrapper li:last-child {
+  margin-right: 0; /* Remove margin from the last item */
+}
+
+.level-1,
+.level-2,
+.level-3 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* LEVEL-1 STYLES */
+.level-1 {
+  width: 50%;
+  margin: 0 auto 60px; /* Margin below level 1 */
+  background: var(--level-1);
+}
+
+.level-1::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 40px; /* Height for more vertical space */
+  background: var(--black);
+}
+
+/* LEVEL-2 STYLES */
+.level-2-wrapper {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 60px; /* Margin between levels */
+  gap: 40px; /* Gap between nodes horizontally */
+}
+
+.level-2-wrapper::before {
+  content: "";
+  position: absolute;
+  top: -40px; /* Position for more vertical space */
+  left: 0%; /* Start from the left edge */
+  right: 0%; /* End at the right edge */
+  width: auto; /* Full width */
+  height: 2px;
+  background: var(--black);
+}
+
+.level-2-wrapper li {
+  position: relative;
+}
+
+.level-2-wrapper > li::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 40px; /* Height for more vertical space */
+  background: var(--black);
+}
+
+.level-2 {
+  width: 70%;
+  margin: 0 auto;
+  background: var(--level-2);
+}
+
+
+
+.name {
+  margin-left: 10px;
+}

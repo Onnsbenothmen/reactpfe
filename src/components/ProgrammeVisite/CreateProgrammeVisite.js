@@ -3,6 +3,7 @@ import { Form, Input, Button, DatePicker, Select, Modal } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import 'moment/locale/fr';
+import { Row, Col } from 'antd';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -164,76 +165,96 @@ Cordialement,
     return (
         <>
             <Form form={form} name="create-programme-visite" onFinish={onFinish} layout="vertical">
-                <Form.Item name="periode_debut" label="Période Début" rules={[{ required: true }]}>
-                    <DatePicker showTime />
-                </Form.Item>
-                <Form.Item name="periode_fin" label="Période Fin" rules={[{ required: true }]}>
-                    <DatePicker showTime />
-                </Form.Item>
-                <Form.Item name="criteres_evaluation" label="Critères d'Évaluation" rules={[{ required: true }]}>
-                    <TextArea rows={4} />
-                </Form.Item>
-                <Form.Item name="lieu" label="Lieu" rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="description" label="Description">
-                    <TextArea rows={4} />
-                </Form.Item>
-                <Form.Item name="contacts_urgence" label="Contacts d'Urgence">
-                    <Input />
-                </Form.Item>
-                <Form.Item name="conseiller_email" label="Emails des Conseillers" rules={[{ required: true }]}>
-                    <Select mode="multiple" placeholder="Sélectionnez des emails">
-                        {conseillers.map((conseiller) => (
-                            <Option key={conseiller.id} value={conseiller.email}>{conseiller.email}</Option>
-                        ))}
-                    </Select>
-                </Form.Item>
-                <Form.Item name="admin_email" label="Email de l'Administration Publique" rules={[{ required: true }]}>
-    <Select placeholder="Sélectionnez un email">
-        {adminEmails.map((admin) => (
-            <Option key={admin.id} value={admin.email}>{admin.email}</Option>
-        ))}
-    </Select>
+                <Row gutter={16}>
+                    <Col span={12}>
+                        <Form.Item name="periode_debut" label="Période Début" rules={[{ required: true }]}>
+                            <DatePicker showTime />
+                        </Form.Item>
+                        <Form.Item name="periode_fin" label="Période Fin" rules={[{ required: true }]}>
+                            <DatePicker showTime />
+                        </Form.Item>
+                        <Form.Item name="lieu" label="Lieu" rules={[{ required: true }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="contacts_urgence" label="Contacts d'Urgence">
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="admin_email" label="Email de l'Administration Publique" rules={[{ required: true }]}>
+                            <Select placeholder="Sélectionnez un email">
+                                {adminEmails.map((admin) => (
+                                    <Option key={admin.id} value={admin.email}>{admin.email}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item name="conseiller_email" label="Emails des Conseillers" rules={[{ required: true }]}>
+                            <Select mode="multiple" placeholder="Sélectionnez des emails">
+                                {conseillers.map((conseiller) => (
+                                    <Option key={conseiller.id} value={conseiller.email}>{conseiller.email}</Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item name="nomAdminPublique" label="Nom de l'Administration Publique" rules={[{ required: true }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="nomProgramme" label="Nom du Programme" rules={[{ required: true }]}>
+                            <Input />
+                        </Form.Item>
+                        <Form.Item name="criteres_evaluation" label="Critères d'Évaluation" rules={[{ required: true }]}>
+                            <TextArea rows={4} />
+                        </Form.Item>
+                        <Form.Item name="description" label="Description">
+                            <TextArea rows={4} />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Form.Item>
+    <Button 
+        type="primary" 
+        htmlType="submit" 
+        style={{ backgroundColor: '#006bbd', borderColor: '#006bbd'  }}
+    >
+        Créer Programme de Visite
+    </Button>
 </Form.Item>
 
-                <Form.Item name="nomProgramme" label="Nom du Programme" rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item name="nomAdminPublique" label="Nom de l'Administration Publique" rules={[{ required: true }]}>
-                    <Input />
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        Créer Programme de Visite
-                    </Button>
-                </Form.Item>
             </Form>
             <Modal
-                title="Confirmation"
-                visible={modalVisible}
-                onCancel={() => setModalVisible(false)}
-                footer={[
-                    <Button key="cancel" onClick={() => setModalVisible(false)}>
-                        Annuler
-                    </Button>,
-                    <Button key="confirm" type="primary" onClick={handleConfirm}>
-                        Confirmer
-                    </Button>,
-                ]}
-            >
-                <Form.Item label="Objet de l'email">
-                    <Input value={emailObjective} onChange={(e) => setEmailObjective(e.target.value)} />
-                </Form.Item>
-                <Form.Item label="Contenu de l'email pour les conseillers">
-                    <TextArea value={emailContentConseillers} rows={10} readOnly />
-                </Form.Item>
-                <Form.Item label="Contenu de l'email pour l'administration">
-                    <TextArea value={emailContentAdmin} rows={10} readOnly />
-                </Form.Item>
-            </Modal>
-        </>
-    );
+        title={<div style={{ textAlign: 'center', color: '#006bbd', fontFamily: 'Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.2)' }}>Créer un Nouveau Programme de Visite</div>}
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        footer={[
+          <Button key="cancel" onClick={() => setModalVisible(false)}>
+            Annuler
+          </Button>,
+          <Button key="confirm" type="primary" onClick={handleConfirm}>
+            Confirmer
+          </Button>,
+        ]}
+        // Propriété style pour ajuster la largeur et la hauteur
+        style={{ minWidth: '80%', maxWidth: '90%', minHeight: '50vh', maxHeight: '80vh' }}
+      >
+        <Form.Item label="Objet de l'email">
+          <Input value={emailObjective} onChange={(e) => setEmailObjective(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Contenu de l'email pour les conseillers">
+          <Input.TextArea
+            value={emailContentConseillers}
+            autoSize={{ minRows: 6, maxRows: 10 }} // Ajustement dynamique du nombre de lignes
+            onChange={(e) => setEmailContentConseillers(e.target.value)}
+          />
+        </Form.Item>
+        <Form.Item label="Contenu de l'email pour l'administration">
+          <Input.TextArea
+            value={emailContentAdmin}
+            autoSize={{ minRows: 6, maxRows: 10 }} // Ajustement dynamique du nombre de lignes
+            onChange={(e) => setEmailContentAdmin(e.target.value)}
+          />
+        </Form.Item>
+      </Modal>
+    </>
+  );
 };
 
 export default CreateProgrammeVisite;

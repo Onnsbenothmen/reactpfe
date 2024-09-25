@@ -71,15 +71,25 @@ const ArchivedUsers = () => {
       title: 'Actions',
       key: 'actions',
       render: (text, user) => (
-        <Button type="primary" onClick={() => handleActivate(user.id)}>Réactiver</Button>
+        <Button       
+        style={{ backgroundColor: '#006bbd', borderColor: '#006bbd', marginRight: '10px' }} // Ajoutez de l'espace entre les boutons
+        
+
+        type="primary" onClick={() => handleActivate(user.id)}>Réactiver</Button>
       ),
     },
   ];
 
   return (
     <div className="container mt-4" style={{ textAlign: 'left' }}>
-      <h2>Liste des Utilisateurs archivés</h2>
-      <br></br>
+<h2 className="titre-liste"  style={{ 
+  textAlign: 'center', 
+  color: '#2B6CC4', 
+  fontFamily: 'Arial, sans-serif', 
+  textShadow: '2px 2px 4px rgba(0,0,0,0.2)', 
+  margin: '20px 0', 
+  padding: '10px 0' 
+}}>Liste des Utilisateurs archivés</h2>      <br></br>
       <div>
         <Table dataSource={users} columns={columns} />
       </div>
